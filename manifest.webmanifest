@@ -1,0 +1,10 @@
+{
+ "name":"AI Turnaround Radar",
+ "short_name":"AI Radar",
+ "description":"Vändningsbevakning för AI och halvledare",
+ "start_url":"./",
+ "display":"standalone",
+ "background_color":"#07111e",
+ "theme_color":"#08111f",
+ "icons":[{"src":"radar-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
