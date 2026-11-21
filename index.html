@@ -5,434 +5,482 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#07111f">
-<meta name="description" content="AI Turnaround Radar – upptäck tidiga vändningar i AI och halvledare.">
 <title>AI Turnaround Radar</title>
 
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;background:#07111f;color:#eef4ff;
- font-family:Arial,Helvetica,sans-serif;
+* {
+  box-sizing: border-box;
 }
-.container{max-width:1100px;margin:auto;padding:16px}
-header{display:flex;align-items:center;gap:12px;padding:12px 0 20px}
-.logo{
- width:48px;height:48px;border-radius:14px;
- background:linear-gradient(135deg,#00e6a0,#008cff);
- display:flex;align-items:center;justify-content:center;
- color:#061321;font-size:22px;font-weight:bold
+
+body {
+  margin: 0;
+  background: #07111f;
+  color: #e8f1ff;
+  font-family: Arial, sans-serif;
 }
-h1{font-size:22px;margin:0}
-.subtitle{color:#8ea4bd;font-size:13px;margin-top:5px}
-.topbar,.card,.note,.marketcard{
- background:#0d1b2b;border:1px solid #1b2c40;
- border-radius:16px;padding:15px
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 18px;
 }
-.topbar{margin-bottom:16px}
-.toprow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.status{font-size:12px;color:#8ea4bd;margin-top:5px}
-button{
- background:#00d99b;color:#061321;border:0;padding:11px 16px;
- border-radius:10px;font-weight:bold;cursor:pointer
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 12px 0 28px;
 }
-button:disabled{opacity:.5}
-.sectiontitle{font-size:16px;font-weight:bold;margin:22px 0 12px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{min-width:0}
-.cardhead{display:flex;justify-content:space-between;align-items:center}
-.symbol{font-size:19px;font-weight:bold}
-.company{font-size:12px;color:#8ea4bd;margin-top:4px}
-.price{font-size:25px;font-weight:bold;margin-top:16px}
-.change{font-size:13px;margin-top:5px}
-.green{color:#00d99b}
-.red{color:#ff6375}
-.gray{color:#8ea4bd}
-.scorewrap{display:flex;align-items:center;gap:10px;margin-top:17px}
-.score{font-size:20px;font-weight:bold;background:#12283a;border-radius:10px;padding:8px 12px}
-.scorelabel{font-size:12px;color:#8ea4bd}
-.bar{height:7px;background:#1b2c40;border-radius:8px;margin-top:10px;overflow:hidden}
-.fill{height:100%;background:linear-gradient(90deg,#ff6375,#ffd166,#00d99b);width:0%}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
-.metric{background:#081524;padding:9px;border-radius:10px}
-.metriclabel{font-size:10px;color:#8ea4bd}
-.metricvalue{font-size:13px;font-weight:bold;margin-top:5px}
-.chartbox{margin-top:15px}
-canvas{width:100%;height:110px;display:block}
-.checklist{margin-top:15px;border-top:1px solid #1b2c40;padding-top:12px}
-.check{display:flex;justify-content:space-between;font-size:12px;margin:8px 0}
-.ok{color:#00d99b}
-.no{color:#ff6375}
-.missing{padding:20px 0;text-align:center;color:#8ea4bd;font-size:13px}
-.note{
- margin-top:16px;color:#8ea4bd;font-size:12px;line-height:1.6
+
+.logo {
+  width: 66px;
+  height: 66px;
+  border-radius: 20px;
+  background: linear-gradient(135deg,#00d99b,#1675ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold;
 }
-.marketgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.marketcard{min-width:0}
-.marketname{font-size:12px;color:#8ea4bd}
-.marketvalue{font-size:20px;font-weight:bold;margin-top:8px}
-.marketdetail{font-size:12px;margin-top:6px}
-.footer{text-align:center;font-size:11px;color:#62758c;margin:24px 0}
-@media(min-width:800px){
- .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
- .marketgrid{grid-template-columns:repeat(4,1fr)}
+
+h1 {
+  font-size: 25px;
+  margin: 0;
 }
-@media(max-width:400px){
- .container{padding:10px}
- h1{font-size:19px}
- .price{font-size:22px}
- .metrics{gap:5px}
- .metric{padding:7px}
+
+.subtitle {
+  color: #91a6bc;
+  margin-top: 7px;
+  font-size: 14px;
+}
+
+.card {
+  background: #0b1c2b;
+  border: 1px solid #1b3348;
+  border-radius: 22px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+.section-title {
+  font-size: 22px;
+  margin: 26px 0 16px;
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status-text {
+  color: #9aafc3;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+button {
+  border: none;
+  border-radius: 13px;
+  padding: 14px 18px;
+  background: #00d99b;
+  color: #04131c;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.stock-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.stock-card {
+  background: #0b1c2b;
+  border: 1px solid #1b3348;
+  border-radius: 18px;
+  padding: 17px;
+  min-width: 0;
+}
+
+.stock-name {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.symbol {
+  color: #90a6bd;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.price {
+  font-size: 23px;
+  font-weight: bold;
+  margin-top: 16px;
+  word-break: break-word;
+}
+
+.change {
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.green {
+  color: #00d99b;
+}
+
+.red {
+  color: #ff6878;
+}
+
+.neutral {
+  color: #9aafc3;
+}
+
+.score {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 12px 0;
+}
+
+.score-label {
+  font-size: 13px;
+  color: #91a6bc;
+}
+
+.score-bar {
+  height: 8px;
+  background: #203547;
+  border-radius: 10px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  background: linear-gradient(90deg,#1675ff,#00d99b);
+  border-radius: 10px;
+  width: 0%;
+  transition: width .4s;
+}
+
+.details {
+  color: #a5b8cc;
+  font-size: 13px;
+  line-height: 1.7;
+  margin-top: 12px;
+}
+
+.error {
+  color: #ff8b96;
+  font-size: 14px;
+  margin-top: 10px;
+  word-break: break-word;
+}
+
+.info {
+  color: #9aafc3;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.footer {
+  text-align: center;
+  padding: 28px 10px;
+  color: #627b92;
+  font-size: 13px;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 14px;
+  }
+
+  .market-grid,
+  .stock-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stock-card {
+    padding: 14px;
+  }
+
+  .price {
+    font-size: 20px;
+  }
+
+  h1 {
+    font-size: 23px;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
 <header>
- <div class="logo">AI</div>
- <div>
-  <h1>Turnaround Radar</h1>
-  <div class="subtitle">AI & Semiconductor · Vändningsdetektor</div>
- </div>
+  <div class="logo">AI</div>
+  <div>
+    <h1>Turnaround Radar</h1>
+    <div class="subtitle">AI & Semiconductor · Vändningsdetektor</div>
+  </div>
 </header>
 
-<div class="topbar">
- <div class="toprow">
-  <div>
-   <strong>Marknadsscanner</strong>
-   <div class="status" id="status">Ansluter till live-data...</div>
+<div class="card">
+  <div class="status">
+    <div>
+      <strong>Marknadsscanner</strong>
+      <div id="status" class="status-text">Ansluter...</div>
+      <div id="lastUpdate" class="status-text"></div>
+    </div>
+    <button id="refreshBtn" onclick="loadData()">↻ Uppdatera</button>
   </div>
-  <button id="refreshBtn" onclick="loadData()">↻ Uppdatera</button>
- </div>
- <div class="status" id="updated">Senaste uppdatering: –</div>
+  <div id="error" class="error"></div>
 </div>
 
-<div class="sectiontitle">Marknad</div>
-<div class="marketgrid" id="market"></div>
+<h2 class="section-title">Marknad</h2>
 
-<div class="sectiontitle">Vändningsradar</div>
-<div class="grid" id="stocks"></div>
-
-<div class="note">
- <strong>Så läser du radarn</strong><br>
- 0–1/5 = Svag · 2/5 = Tidiga tecken · 3/5 = Möjlig vändning ·
- 4/5 = Stark signal · 5/5 = Alla kriterier uppfyllda.<br><br>
- Scoren bygger på tekniska signaler som RSI, trend, momentum och volym där data finns.
- Det är en indikator – inte en garanti eller köp-/säljrekommendation.
+<div class="market-grid" id="market">
+  <div class="stock-card">
+    <div class="stock-name">SOXX</div>
+    <div class="symbol">Semiconductor ETF</div>
+    <div class="price">--</div>
+    <div class="change neutral">Inväntar data</div>
+  </div>
+  <div class="stock-card">
+    <div class="stock-name">SMH</div>
+    <div class="symbol">Semiconductor ETF</div>
+    <div class="price">--</div>
+    <div class="change neutral">Inväntar data</div>
+  </div>
 </div>
 
-<div class="footer">AI Turnaround Radar · Live-data</div>
+<h2 class="section-title">Vändningsradar</h2>
+
+<div class="stock-grid" id="stocks">
+  <div class="stock-card"><strong>NVDA</strong><div class="price">--</div></div>
+  <div class="stock-card"><strong>AMD</strong><div class="price">--</div></div>
+  <div class="stock-card"><strong>MU</strong><div class="price">--</div></div>
+  <div class="stock-card"><strong>AVGO</strong><div class="price">--</div></div>
+</div>
+
+<div class="card" style="margin-top:20px">
+  <strong>Så läser du radarn</strong>
+  <div class="info">
+    0–1/5 = Svag signal · 2/5 = Tidiga tecken ·
+    3/5 = Möjlig vändning · 4/5 = Stark signal ·
+    5/5 = Alla kriterier uppfyllda.
+    <br><br>
+    Scoren bygger på tekniska signaler som RSI, trend,
+    momentum och volym där data finns. Det är en indikator,
+    inte en garanti eller köp-/säljrekommendation.
+  </div>
+</div>
+
+<div class="footer">
+  AI Turnaround Radar · Live-data
+</div>
+
 </div>
 
 <script>
-const symbols = [
- {symbol:"NVDA",name:"NVIDIA"},
- {symbol:"AMD",name:"Advanced Micro Devices"},
- {symbol:"MU",name:"Micron Technology"},
- {symbol:"AVGO",name:"Broadcom"},
- {symbol:"SOXX",name:"Semiconductor ETF"}
-];
+const API_URL = "/api/radar";
 
-const marketSymbols=["SOXX","SMH"];
-let isLoading=false;
+const symbols = ["NVDA", "AMD", "MU", "AVGO", "SOXX", "SMH"];
 
-function fmtPrice(value){
- if(value===null || value===undefined || value==="" || !Number.isFinite(Number(value)))return "–";
- return Number(value).toLocaleString("sv-SE",{minimumFractionDigits:2,maximumFractionDigits:2});
+function formatPrice(value) {
+  if (value == null || !Number.isFinite(Number(value))) return "--";
+  return "$" + Number(value).toFixed(2);
 }
-function fmtPercent(value){
- if(value===null || value===undefined || !Number.isFinite(Number(value)))return "–";
- const n=Number(value);
- return (n>0?"+":"")+n.toFixed(2)+"%";
+
+function formatChange(value) {
+  if (value == null || !Number.isFinite(Number(value))) return "--";
+  const n = Number(value);
+  return (n >= 0 ? "+" : "") + n.toFixed(2) + "%";
 }
-function fmtNum(value,digits=2){
- if(value===null || value===undefined || !Number.isFinite(Number(value)))return "–";
- return Number(value).toFixed(digits);
+
+function changeClass(value) {
+  if (value == null || !Number.isFinite(Number(value))) return "neutral";
+  return Number(value) >= 0 ? "green" : "red";
 }
-function colorClass(value){
- if(value===null || value===undefined || !Number.isFinite(Number(value)))return "gray";
- return Number(value)>=0?"green":"red";
+
+function scoreLabel(score) {
+  if (score == null) return "Ingen signal";
+  if (score <= 1) return "Svag signal";
+  if (score === 2) return "Tidiga tecken";
+  if (score === 3) return "Möjlig vändning";
+  if (score === 4) return "Stark signal";
+  return "Alla kriterier uppfyllda";
 }
-function getDataArray(data){
- if(!data)return [];
- if(Array.isArray(data))return data;
- if(Array.isArray(data.results))return data.results;
- if(Array.isArray(data.data))return data.data;
- if(Array.isArray(data.stocks))return data.stocks;
- if(Array.isArray(data.symbols))return data.symbols;
- if(typeof data==="object"){
-  return Object.values(data).filter(v=>v&&typeof v==="object"&&!Array.isArray(v));
- }
- return [];
+
+function renderMarket(data) {
+  const marketSymbols = ["SOXX", "SMH"];
+  const marketEl = document.getElementById("market");
+
+  marketEl.innerHTML = marketSymbols.map(symbol => {
+    const item = data[symbol];
+    if (!item) {
+      return `
+        <div class="stock-card">
+          <div class="stock-name">${symbol}</div>
+          <div class="symbol">Semiconductor ETF</div>
+          <div class="price">--</div>
+          <div class="change neutral">Data saknas</div>
+        </div>`;
+    }
+
+    return `
+      <div class="stock-card">
+        <div class="stock-name">${symbol}</div>
+        <div class="symbol">Semiconductor ETF</div>
+        <div class="price">${formatPrice(item.price ?? item.latest)}</div>
+        <div class="change ${changeClass(item.changePct ?? item.change)}">
+          ${formatChange(item.changePct ?? item.change)}
+        </div>
+      </div>`;
+  }).join("");
 }
-function normalizeSymbol(item){
- return String(item?.symbol||item?.ticker||item?.name||"").toUpperCase();
+
+function renderStocks(data) {
+  const stockEl = document.getElementById("stocks");
+  const stockSymbols = ["NVDA", "AMD", "MU", "AVGO"];
+
+  stockEl.innerHTML = stockSymbols.map(symbol => {
+    const item = data[symbol];
+
+    if (!item) {
+      return `
+        <div class="stock-card">
+          <div class="stock-name">${symbol}</div>
+          <div class="symbol">Data saknas</div>
+          <div class="price">--</div>
+          <div class="score-label">Inväntar data</div>
+        </div>`;
+    }
+
+    const score = item.score != null ? Number(item.score) : null;
+    const price = item.price ?? item.latest;
+    const change = item.changePct ?? item.change;
+    const rsi = item.rsi;
+    const ma20 = item.ma20;
+    const ma50 = item.ma50;
+
+    return `
+      <div class="stock-card">
+        <div class="stock-name">${symbol}</div>
+        <div class="symbol">AI / Semiconductor</div>
+
+        <div class="price">${formatPrice(price)}</div>
+
+        <div class="change ${changeClass(change)}">
+          ${formatChange(change)}
+        </div>
+
+        <div class="score">
+          ${score == null ? "--" : score + "/5"}
+        </div>
+
+        <div class="score-label">
+          ${scoreLabel(score)}
+        </div>
+
+        <div class="score-bar">
+          <div class="score-fill" style="width:${score == null ? 0 : Math.max(0,Math.min(5,score))*20}%"></div>
+        </div>
+
+        <div class="details">
+          RSI: ${rsi == null ? "--" : Number(rsi).toFixed(1)}<br>
+          MA20: ${ma20 == null ? "--" : formatPrice(ma20)}<br>
+          MA50: ${ma50 == null ? "--" : formatPrice(ma50)}
+        </div>
+      </div>`;
+  }).join("");
 }
-function getValue(item,...keys){
- for(const key of keys){
-  if(item && item[key]!==undefined && item[key]!==null && item[key]!==""){
-   const n=Number(item[key]);
-   if(Number.isFinite(n))return n;
+
+function normalizeResponse(json) {
+  if (json.results && Array.isArray(json.results)) {
+    const obj = {};
+    json.results.forEach(item => {
+      if (item.symbol) obj[item.symbol] = item;
+    });
+    return obj;
   }
- }
- return null;
-}
-function getHistory(item){
- let history=item?.history||item?.prices||item?.data||item?.bars||item?.series;
- if(!Array.isArray(history))return [];
- return history.map(x=>getValue(x,"close","price","value")).filter(x=>x!==null);
-}
-function calculateRSI(values){
- if(!Array.isArray(values)||values.length<15)return null;
- let gains=0,losses=0;
- for(let i=values.length-14;i<values.length;i++){
-  const diff=values[i]-values[i-1];
-  if(diff>0)gains+=diff;
-  else losses+=Math.abs(diff);
- }
- const avgGain=gains/14;
- const avgLoss=losses/14;
- if(avgLoss===0)return 100;
- return 100-(100/(1+avgGain/avgLoss));
-}
-function calculateMA(values,period){
- if(!values||values.length<period)return null;
- const slice=values.slice(-period);
- return slice.reduce((a,b)=>a+b,0)/period;
-}
-function calculateScore(item){
- const history=getHistory(item);
- const price=getValue(item,"latest","price","close","currentPrice","last");
- const ma20=getValue(item,"MA20","ma20","sma20") ?? calculateMA(history,20);
- const ma50=getValue(item,"MA50","ma50","sma50") ?? calculateMA(history,50);
- const rsi=getValue(item,"RSI","rsi") ?? calculateRSI(history);
- const change=getValue(item,"changePct","change_percent","percentChange","change");
- const volume=item.volumeSignal ?? item.volume ?? null;
 
- let score=0;
- const checks=[];
-
- if(price!==null && ma20!==null){
-  const ok=price>ma20;
-  if(ok)score++;
-  checks.push({name:"Pris över MA20",ok});
- }
- if(price!==null && ma50!==null){
-  const ok=price>ma50;
-  if(ok)score++;
-  checks.push({name:"Pris över MA50",ok});
- }
- if(ma20!==null && ma50!==null){
-  const ok=ma20>ma50;
-  if(ok)score++;
-  checks.push({name:"MA20 över MA50",ok});
- }
- if(rsi!==null){
-  const ok=rsi>=45 && rsi<=70;
-  if(ok)score++;
-  checks.push({name:"RSI i positiv zon",ok});
- }
- if(change!==null){
-  const ok=change>0;
-  if(ok)score++;
-  checks.push({name:"Positivt momentum",ok});
- }else if(history.length>=2){
-  const ok=history[history.length-1]>history[history.length-2];
-  if(ok)score++;
-  checks.push({name:"Positivt momentum",ok});
- }
-
- return {score,checks,history,price,ma20,ma50,rsi,change};
-}
-function scoreText(score){
- if(score<=1)return "Svag signal";
- if(score===2)return "Tidiga tecken";
- if(score===3)return "Möjlig vändning";
- if(score===4)return "Stark signal";
- return "Mycket stark signal";
-}
-function drawChart(canvas,values){
- const ctx=canvas.getContext("2d");
- const w=canvas.clientWidth;
- const h=canvas.clientHeight;
- canvas.width=w*devicePixelRatio;
- canvas.height=h*devicePixelRatio;
- ctx.scale(devicePixelRatio,devicePixelRatio);
- ctx.clearRect(0,0,w,h);
-
- if(!values||values.length<2){
-  ctx.fillStyle="#62758c";
-  ctx.font="12px Arial";
-  ctx.fillText("Chart-data saknas",8,30);
-  return;
- }
- const min=Math.min(...values);
- const max=Math.max(...values);
- const range=max-min||1;
- const pad=8;
- const points=values.map((v,i)=>({
-  x:pad+(i/(values.length-1))*(w-pad*2),
-  y:h-pad-((v-min)/range)*(h-pad*2)
- }));
- ctx.beginPath();
- points.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
- ctx.lineWidth=2;
- ctx.strokeStyle="#00d99b";
- ctx.stroke();
-
- ctx.lineTo(points[points.length-1].x,h);
- ctx.lineTo(points[0].x,h);
- ctx.closePath();
- const gradient=ctx.createLinearGradient(0,0,0,h);
- gradient.addColorStop(0,"rgba(0,217,155,0.22)");
- gradient.addColorStop(1,"rgba(0,217,155,0)");
- ctx.fillStyle=gradient;
- ctx.fill();
-}
-function renderStockCard(symbol,raw){
- const info=symbols.find(s=>s.symbol===symbol)||{symbol,name:symbol};
- const item=raw||{};
- const result=calculateScore(item);
- const price=result.price;
- const change=result.change;
- const changeClass=colorClass(change);
- const score=result.score;
- const rsi=result.rsi;
- const ma20=result.ma20;
- const ma50=result.ma50;
-
- const div=document.createElement("div");
- div.className="card";
-
- if(!raw || price===null){
-  div.innerHTML=`
-   <div class="cardhead"><div class="symbol">${info.symbol}</div></div>
-   <div class="company">${info.name}</div>
-   <div class="missing">Live-data saknas just nu</div>
-   <div class="status">Kontrollera API och Netlify-funktionen.</div>
-  `;
-  return div;
- }
-
- const changeDisplay=change!==null?fmtPercent(change):"–";
- div.innerHTML=`
-  <div class="cardhead">
-   <div>
-    <div class="symbol">${info.symbol}</div>
-    <div class="company">${info.name}</div>
-   </div>
-   <div class="score">${score}/5</div>
-  </div>
-  <div class="price">${fmtPrice(price)}</div>
-  <div class="change ${changeClass}">${changeDisplay}</div>
-
-  <div class="scorewrap">
-   <div class="scorelabel">${scoreText(score)}</div>
-  </div>
-  <div class="bar"><div class="fill" style="width:${score*20}%"></div></div>
-
-  <div class="metrics">
-   <div class="metric">
-    <div class="metriclabel">RSI</div>
-    <div class="metricvalue">${fmtNum(rsi,1)}</div>
-   </div>
-   <div class="metric">
-    <div class="metriclabel">MA20</div>
-    <div class="metricvalue">${fmtPrice(ma20)}</div>
-   </div>
-   <div class="metric">
-    <div class="metriclabel">MA50</div>
-    <div class="metricvalue">${fmtPrice(ma50)}</div>
-   </div>
-  </div>
-
-  <div class="chartbox"><canvas></canvas></div>
-  <div class="checklist">
-   ${result.checks.map(c=>`
-    <div class="check">
-     <span>${c.name}</span>
-     <span class="${c.ok?"ok":"no"}">${c.ok?"✓":"✕"}</span>
-    </div>
-   `).join("")}
-  </div>
- `;
- const canvas=div.querySelector("canvas");
- drawChart(canvas,result.history);
- return div;
-}
-function renderMarket(items){
- const market=document.getElementById("market");
- market.innerHTML="";
- for(const symbol of marketSymbols){
-  const item=items.find(x=>normalizeSymbol(x)===symbol);
-  if(!item)continue;
-  const price=getValue(item,"latest","price","close","currentPrice","last");
-  const change=getValue(item,"changePct","change_percent","percentChange","change");
-  const card=document.createElement("div");
-  card.className="marketcard";
-  card.innerHTML=`
-   <div class="marketname">${symbol}</div>
-   <div class="marketvalue">${fmtPrice(price)}</div>
-   <div class="marketdetail ${colorClass(change)}">${fmtPercent(change)}</div>
-  `;
-  market.appendChild(card);
- }
-}
-function renderAll(data){
- const items=getDataArray(data);
- const stocks=document.getElementById("stocks");
- stocks.innerHTML="";
- const map={};
- for(const item of items){
-  const sym=normalizeSymbol(item);
-  if(sym)map[sym]=item;
- }
- for(const info of symbols){
-  stocks.appendChild(renderStockCard(info.symbol,map[info.symbol]));
- }
- renderMarket(items);
-}
-async function loadData(){
- if(isLoading)return;
- isLoading=true;
- const btn=document.getElementById("refreshBtn");
- const status=document.getElementById("status");
- btn.disabled=true;
- status.textContent="Hämtar data...";
- try{
-  const response=await fetch("/.netlify/functions/radar?refresh="+Date.now(),{
-   cache:"no-store",
-   headers:{"Accept":"application/json"}
-  });
-  if(!response.ok){
-   throw new Error("Server svarade "+response.status);
+  if (json.data && Array.isArray(json.data)) {
+    const obj = {};
+    json.data.forEach(item => {
+      if (item.symbol) obj[item.symbol] = item;
+    });
+    return obj;
   }
-  const data=await response.json();
-  renderAll(data);
-  status.textContent="Live-data hämtad";
-  document.getElementById("updated").textContent=
-   "Senaste uppdatering: "+new Date().toLocaleTimeString("sv-SE");
- }catch(error){
-  console.error(error);
-  status.textContent="Kunde inte hämta live-data";
-  document.getElementById("updated").textContent=
-   "Fel: "+error.message;
-  const stocks=document.getElementById("stocks");
-  if(!stocks.innerHTML){
-   stocks.innerHTML="<div class='card wide'><div class='missing'>Kunde inte ansluta till live-data. Kontrollera Netlify och API-inställningar.</div></div>";
-  }
- }finally{
-  isLoading=false;
-  btn.disabled=false;
- }
+
+  return json;
 }
 
-// Starta direkt
-loadData();
+async function loadData() {
+  const status = document.getElementById("status");
+  const error = document.getElementById("error");
+  const btn = document.getElementById("refreshBtn");
+
+  status.textContent = "Hämtar data...";
+  error.textContent = "";
+  btn.disabled = true;
+
+  try {
+    const response = await fetch(API_URL + "?t=" + Date.now(), {
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error("Server svarade " + response.status);
+    }
+
+    const json = await response.json();
+    const data = normalizeResponse(json);
+
+    renderMarket(data);
+    renderStocks(data);
+
+    status.textContent = "Live-data ansluten";
+    document.getElementById("lastUpdate").textContent =
+      "Senast uppdaterad: " + new Date().toLocaleTimeString("sv-SE");
+
+  } catch (err) {
+    status.textContent = "Kunde inte hämta live-data";
+    error.textContent = "Fel: " + err.message;
+
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// Uppdatera manuellt
+document.getElementById("refreshBtn").addEventListener("click", loadData);
 
 // Automatisk uppdatering var 15:e minut
-setInterval(loadData,15*60*1000);
+setInterval(loadData, 15 * 60 * 1000);
+
+// Start
+loadData();
 </script>
+
 </body>
 </html>
