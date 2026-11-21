@@ -424,6 +424,21 @@ function normalizeResponse(json) {
     return obj;
   }
 
+  if (json.results && typeof json.results === "object") {
+    return json.results;
+  }
+
+  if (json.data && Array.isArray(json.data)) {
+    const obj = {};
+    json.data.forEach(item => {
+      if (item.symbol) obj[item.symbol] = item;
+    });
+    return obj;
+  }
+
+  return json;
+}
+
   if (json.data && Array.isArray(json.data)) {
     const obj = {};
     json.data.forEach(item => {
