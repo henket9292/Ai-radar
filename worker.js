@@ -1,148 +1,150 @@
 export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
-
-    const allowedPaths = [
-      "/",
-      "/api/radar",
-      "/.netlify/functions/radar"
-    ];
-
-    if (!allowedPaths.includes(url.pathname)) {
-      return new Response("Not found", { status: 404 });
-    }
-
-    const corsHeaders = {
+  async fetch(request, env, ctx) {
+    const cors = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type"
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Content-Type": "application/json"
     };
 
     if (request.method === "OPTIONS") {
-      return new Response(null, {
-        status: 204,
-        headers: corsHeaders
-      });
+      return new Response(null, { headers: cors });
     }
 
-    if (!env.ALPHA_VANTAGE_API_KEY) {
-      return json({
-        error: "API key saknas",
-        message: "Lägg till ALPHA_VANTAGE_API_KEY i Worker Secrets."
-      }, 500, corsHeaders);
+    const url = new URL(request.url);
+
+    if (url.pathname === "/") {
+      return new Response(JSON.stringify({
+        status: "AI Turnaround Radar API",
+        live: true,
+        endpoint: "/api/radar"
+      }), { headers: cors });
     }
 
-    const symbols = ["SOXX", "SMH", "NVDA", "AMD", "MU", "AVGO"];
+    if (url.pathname !== "/api/radar") {
+      return new Response(JSON.stringify({
+        error: "Endpoint not found"
+      }), { status: 404, headers: cors });
+    }
+
+    const apiKey = env.ALPHA_VANTAGE_API_KEY;
+
+    if (!apiKey) {
+      return new Response(JSON.stringify({
+        error: "Missing API key",
+        message: "Add ALPHA_VANTAGE_API_KEY in Worker settings"
+      }), { status: 500, headers: cors });
+    }
+
+    const symbols = ["NVDA", "AMD", "MU", "AVGO", "SOXX", "SMH"];
 
     try {
       const results = {};
 
-      for (const symbol of symbols) {
+      await Promise.all(symbols.map(async (symbol) => {
         const apiUrl =
-          "https://www.alphavantage.co/query?" +
-          "function=TIME_SERIES_DAILY" +
-          "&symbol=" + encodeURIComponent(symbol) +
-          "&outputsize=compact" +
-          "&apikey=" + encodeURIComponent(env.ALPHA_VANTAGE_API_KEY);
+          `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=compact&apikey=${apiKey}`;
 
         const response = await fetch(apiUrl);
-        const data = await response.json();
+        const json = await response.json();
 
-        const series = data["Time Series (Daily)"];
+        const series = json["Time Series (Daily)"];
 
         if (!series) {
           results[symbol] = {
             symbol,
-            error: data.Note || data.Information || data["Error Message"] || "Ingen data"
+            error: json["Note"] || json["Information"] || "No data"
           };
-          continue;
+          return;
         }
 
         const dates = Object.keys(series).sort().reverse();
-        const closes = dates.map(d => Number(series[d]["4. close"]));
-        const latest = closes[0];
-        const previous = closes[1];
+        const bars = dates.slice(0, 60).map(date => ({
+          date,
+          open: Number(series[date]["1. open"]),
+          high: Number(series[date]["2. high"]),
+          low: Number(series[date]["3. low"]),
+          close: Number(series[date]["4. close"]),
+          volume: Number(series[date]["5. volume"])
+        }));
 
-        const changePct = previous
-          ? ((latest - previous) / previous) * 100
+        const closes = bars.map(b => b.close);
+        const latest = closes[0];
+        const prev = closes[1];
+
+        const changePct = prev
+          ? ((latest - prev) / prev) * 100
           : 0;
 
-        const ma20 = average(closes.slice(0, 20));
-        const ma50 = average(closes.slice(0, 50));
+        function average(values) {
+          if (!values.length) return null;
+          return values.reduce((a, b) => a + b, 0) / values.length;
+        }
+
+        const ma20 = closes.length >= 20
+          ? average(closes.slice(0, 20))
+          : null;
+
+        const ma50 = closes.length >= 50
+          ? average(closes.slice(0, 50))
+          : null;
+
+        function calculateRSI(values, period = 14) {
+          if (values.length < period + 1) return null;
+
+          let gains = 0;
+          let losses = 0;
+
+          for (let i = 0; i < period; i++) {
+            const diff = values[i] - values[i + 1];
+
+            if (diff > 0) gains += diff;
+            else losses += Math.abs(diff);
+          }
+
+          const avgGain = gains / period;
+          const avgLoss = losses / period;
+
+          if (avgLoss === 0) return 100;
+
+          const rs = avgGain / avgLoss;
+          return 100 - (100 / (1 + rs));
+        }
 
         const rsi = calculateRSI(closes);
 
         let score = 0;
 
-        if (latest > ma20) score++;
-        if (ma20 > ma50) score++;
-        if (rsi > 40 && rsi < 70) score++;
         if (changePct > 0) score++;
-        if (latest > previous) score++;
+        if (ma20 && latest > ma20) score++;
+        if (ma50 && latest > ma50) score++;
+        if (ma20 && ma50 && ma20 > ma50) score++;
+        if (rsi !== null && rsi > 40 && rsi < 70) score++;
 
         results[symbol] = {
           symbol,
           latest,
-          previous,
+          prev,
           changePct,
-          ma20,
-          ma50,
-          rsi,
+          MA20: ma20,
+          MA50: ma50,
+          RSI: rsi,
           score,
-          dates: dates.slice(0, 30),
-          prices: closes.slice(0, 30),
-          lastUpdate: dates[0]
+          bars: bars.reverse()
         };
-      }
+      }));
 
-      return json({
+      return new Response(JSON.stringify({
         success: true,
         timestamp: new Date().toISOString(),
         results
-      }, 200, corsHeaders);
+      }), { headers: cors });
 
     } catch (error) {
-      return json({
+      return new Response(JSON.stringify({
         success: false,
         error: error.message
-      }, 500, corsHeaders);
+      }), { status: 500, headers: cors });
     }
   }
 };
-
-function average(values) {
-  if (!values.length) return null;
-  return values.reduce((a, b) => a + b, 0) / values.length;
-}
-
-function calculateRSI(closes, period = 14) {
-  if (closes.length <= period) return null;
-
-  let gains = 0;
-  let losses = 0;
-
-  for (let i = 0; i < period; i++) {
-    const change = closes[i] - closes[i + 1];
-
-    if (change > 0) gains += change;
-    else losses += Math.abs(change);
-  }
-
-  const avgGain = gains / period;
-  const avgLoss = losses / period;
-
-  if (avgLoss === 0) return 100;
-
-  const rs = avgGain / avgLoss;
-  return 100 - (100 / (1 + rs));
-}
-
-function json(data, status, corsHeaders) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      ...corsHeaders
-    }
-  });
-}
