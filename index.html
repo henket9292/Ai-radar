@@ -1,47 +1,438 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#08111f"><meta name="description" content="AI Turnaround Radar – upptäck tidiga vändningar i AI och halvledare.">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="radar-icon.svg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<meta name="description" content="AI Turnaround Radar – upptäck tidiga vändningar i AI och halvledare.">
 <title>AI Turnaround Radar</title>
+
 <style>
-:root{color-scheme:dark;--bg:#07111e;--panel:#0d1b2b;--panel2:#102236;--border:#20364c;--text:#edf4fc;--muted:#91a8bd;--cyan:#38d4e7;--green:#47d49a;--yellow:#f0c66b;--red:#f47777;--blue:#72aaff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% -15%,#142c43 0%,transparent 45%),var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text)}.wrap{max-width:1050px;margin:auto;padding:20px 16px 60px}.header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}.brand{display:flex;gap:11px;align-items:center}.logo{width:44px;height:44px;border-radius:13px;background:#0d2639;border:1px solid #23465e;display:grid;place-items:center;color:var(--cyan)}h1{font-size:18px;margin:0;letter-spacing:.3px}.sub{font-size:12px;color:var(--muted);margin-top:3px}.tag{border:1px solid #2a455c;background:#112338;color:#a8c4d9;border-radius:20px;padding:7px 10px;font-size:11px;white-space:nowrap}.topgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.card{background:linear-gradient(145deg,rgba(16,34,54,.96),rgba(9,23,38,.98));border:1px solid var(--border);border-radius:17px;padding:17px;box-shadow:0 10px 28px #0002}.sector{min-height:190px}.cardhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}.scoreline{display:flex;align-items:baseline;gap:8px;margin:13px 0 5px}.score{font-size:48px;font-weight:750;letter-spacing:-2px}.outof{color:var(--muted)}.state{display:inline-flex;align-items:center;gap:7px;border-radius:20px;padding:6px 9px;font-size:12px;border:1px solid #4c3f2c;background:#282418;color:var(--yellow)}.dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}.scorebar{height:8px;background:#1b3046;border-radius:10px;overflow:hidden;margin:12px 0}.scorebar>span{display:block;height:100%;width:20%;background:linear-gradient(90deg,#e6b75c,#f1cc76);border-radius:10px}.tiny{font-size:11px;color:var(--muted)}.metricgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}.metric{background:#0a1928;border:1px solid #1b3044;border-radius:11px;padding:10px}.metric .mname{font-size:11px;color:var(--muted)}.metric .mval{font-weight:650;margin-top:6px;font-size:13px}.stocks{margin-top:17px}.stockgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:11px}.stock{cursor:pointer;transition:.15s;border:1px solid var(--border);border-radius:14px;background:#0b1929;padding:14px}.stock:hover,.stock:focus{transform:translateY(-2px);border-color:#3b6c88;outline:none}.ticker{font-weight:750;font-size:15px}.company{font-size:11px;color:var(--muted);margin-top:3px}.stockscore{display:flex;align-items:baseline;gap:5px;margin:10px 0 5px}.stockscore strong{font-size:27px}.stockscore span{font-size:11px;color:var(--muted)}.mini{height:35px;margin-top:4px}.mini svg{width:100%;height:100%;overflow:visible}.signal{font-size:10px;margin-top:9px;color:var(--yellow)}.sectiontitle{margin:22px 0 10px;font-size:14px;font-weight:650}.bottomgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:17px}.list{display:grid;gap:10px;margin-top:12px}.rowitem{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid #1d3347;border-radius:11px;background:#0a1827}.label{font-size:12px}.value{font-size:12px;color:var(--yellow);font-weight:650}.method{color:var(--muted);font-size:12px;line-height:1.6}.tabs{display:flex;gap:7px;margin:16px 0}.tab{border:1px solid #254057;background:#0b1929;color:#9db5c9;padding:9px 13px;border-radius:10px;font-size:12px;cursor:pointer}.tab.active{color:#07131e;background:var(--cyan);border-color:var(--cyan);font-weight:700}.detail{display:none}.detail.show{display:block}.detail h2{font-size:17px;margin:0 0 8px}.detail p{font-size:13px;color:var(--muted);line-height:1.5}.btn{border:1px solid #2a4b63;background:#11253a;color:#d5e7f7;border-radius:10px;padding:10px 12px;cursor:pointer;font-size:12px}.btn:active{transform:scale(.98)}.alertrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.footer{font-size:10px;color:#718ba1;text-align:center;margin-top:25px;line-height:1.5}.hidden{display:none}
-@media(max-width:700px){.topgrid,.bottomgrid{grid-template-columns:1fr}.stockgrid{grid-template-columns:repeat(2,1fr)}.wrap{padding:14px 12px 45px}.sector{min-height:unset}.score{font-size:43px}.tag{font-size:10px;padding:6px 8px}}
+*{box-sizing:border-box}
+body{
+ margin:0;background:#07111f;color:#eef4ff;
+ font-family:Arial,Helvetica,sans-serif;
+}
+.container{max-width:1100px;margin:auto;padding:16px}
+header{display:flex;align-items:center;gap:12px;padding:12px 0 20px}
+.logo{
+ width:48px;height:48px;border-radius:14px;
+ background:linear-gradient(135deg,#00e6a0,#008cff);
+ display:flex;align-items:center;justify-content:center;
+ color:#061321;font-size:22px;font-weight:bold
+}
+h1{font-size:22px;margin:0}
+.subtitle{color:#8ea4bd;font-size:13px;margin-top:5px}
+.topbar,.card,.note,.marketcard{
+ background:#0d1b2b;border:1px solid #1b2c40;
+ border-radius:16px;padding:15px
+}
+.topbar{margin-bottom:16px}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.status{font-size:12px;color:#8ea4bd;margin-top:5px}
+button{
+ background:#00d99b;color:#061321;border:0;padding:11px 16px;
+ border-radius:10px;font-weight:bold;cursor:pointer
+}
+button:disabled{opacity:.5}
+.sectiontitle{font-size:16px;font-weight:bold;margin:22px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{min-width:0}
+.cardhead{display:flex;justify-content:space-between;align-items:center}
+.symbol{font-size:19px;font-weight:bold}
+.company{font-size:12px;color:#8ea4bd;margin-top:4px}
+.price{font-size:25px;font-weight:bold;margin-top:16px}
+.change{font-size:13px;margin-top:5px}
+.green{color:#00d99b}
+.red{color:#ff6375}
+.gray{color:#8ea4bd}
+.scorewrap{display:flex;align-items:center;gap:10px;margin-top:17px}
+.score{font-size:20px;font-weight:bold;background:#12283a;border-radius:10px;padding:8px 12px}
+.scorelabel{font-size:12px;color:#8ea4bd}
+.bar{height:7px;background:#1b2c40;border-radius:8px;margin-top:10px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,#ff6375,#ffd166,#00d99b);width:0%}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.metric{background:#081524;padding:9px;border-radius:10px}
+.metriclabel{font-size:10px;color:#8ea4bd}
+.metricvalue{font-size:13px;font-weight:bold;margin-top:5px}
+.chartbox{margin-top:15px}
+canvas{width:100%;height:110px;display:block}
+.checklist{margin-top:15px;border-top:1px solid #1b2c40;padding-top:12px}
+.check{display:flex;justify-content:space-between;font-size:12px;margin:8px 0}
+.ok{color:#00d99b}
+.no{color:#ff6375}
+.missing{padding:20px 0;text-align:center;color:#8ea4bd;font-size:13px}
+.note{
+ margin-top:16px;color:#8ea4bd;font-size:12px;line-height:1.6
+}
+.marketgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.marketcard{min-width:0}
+.marketname{font-size:12px;color:#8ea4bd}
+.marketvalue{font-size:20px;font-weight:bold;margin-top:8px}
+.marketdetail{font-size:12px;margin-top:6px}
+.footer{text-align:center;font-size:11px;color:#62758c;margin:24px 0}
+@media(min-width:800px){
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .marketgrid{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:400px){
+ .container{padding:10px}
+ h1{font-size:19px}
+ .price{font-size:22px}
+ .metrics{gap:5px}
+ .metric{padding:7px}
+}
 </style>
 </head>
-<body><div class="wrap">
-<header class="header"><div class="brand"><div class="logo"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/><path d="M12 12 19 5"/></svg></div><div><h1>AI TURNAROUND RADAR</h1><div class="sub">AI & halvledare · Vändningsbevakning</div></div></div><div class="tag">● PROTOTYP · LIVE-KOPPLING PÅ GÅNG</div></header>
-<section class="card" id="livepanel" style="margin-top:16px">
-<div class="alertrow"><div><div class="cardhead">LIVE TEST · MU + SOXX</div><div style="font-weight:650;margin-top:7px">Riktiga data – när API är anslutet</div><div class="tiny" id="live-status" style="margin-top:5px">Serverkoppling väntar på API-nyckel.</div></div><button class="btn" id="refresh-live">Hämta live-data</button></div>
-<div id="live-results" class="metricgrid"></div><div class="tiny" id="live-foot" style="margin-top:10px">Live-data kan fördröjas och poängen är en enkel teknisk sammanställning, inte investeringsråd.</div>
-</section>
-<div class="topgrid"><section class="card sector"><div class="cardhead"><span>SEKTOR-SIGNAL</span><span>SOXX / SMH</span></div><div class="scoreline"><div class="score">2</div><div class="outof">/ 10</div></div><div class="state"><i class="dot"></i> AVVAKTA · Svag trend</div><div class="scorebar"><span></span></div><div class="tiny">Exempelpoäng – inte liveanalys eller investeringsråd</div></section>
-<section class="card"><div class="cardhead"><span>RADARSTATUS</span><span>5 indikatorer</span></div><div class="metricgrid"><div class="metric"><div class="mname">ETF-flöden</div><div class="mval" style="color:var(--red)">Svaga</div></div><div class="metric"><div class="mname">Trend</div><div class="mval" style="color:var(--red)">Nedåt</div></div><div class="metric"><div class="mname">Marknadsbredd</div><div class="mval" style="color:var(--yellow)">Avvaktar</div></div><div class="metric"><div class="mname">Momentum / volym</div><div class="mval" style="color:var(--yellow)">Neutral</div></div></div></section></div>
-<section class="stocks"><div class="sectiontitle">BEVAKADE AKTIER <span class="tiny"> · tryck för detaljer</span></div><div class="stockgrid">
-<div class="stock" tabindex="0" data-ticker="NVDA"><div class="ticker">NVDA</div><div class="company">NVIDIA</div><div class="stockscore"><strong>1</strong><span>/12</span></div><div class="mini" data-points="25,23,24,22,20,19,21,18,17,18,16"></div><div class="signal">● Svag signal</div></div>
-<div class="stock" tabindex="0" data-ticker="MU"><div class="ticker">MU</div><div class="company">Micron Technology</div><div class="stockscore"><strong>0</strong><span>/12</span></div><div class="mini" data-points="27,25,24,23,21,20,18,19,16,15,14"></div><div class="signal">● Svag signal</div></div>
-<div class="stock" tabindex="0" data-ticker="AMD"><div class="ticker">AMD</div><div class="company">Advanced Micro Devices</div><div class="stockscore"><strong>3</strong><span>/12</span></div><div class="mini" data-points="16,17,15,18,19,18,21,22,20,23,24"></div><div class="signal" style="color:var(--yellow)">● Tidiga tecken</div></div>
-<div class="stock" tabindex="0" data-ticker="AVGO"><div class="ticker">AVGO</div><div class="company">Broadcom</div><div class="stockscore"><strong>2</strong><span>/12</span></div><div class="mini" data-points="26,25,23,24,22,20,19,21,20,18,19"></div><div class="signal">● Svag signal</div></div>
-</div></section>
-<div class="tabs"><button class="tab active" data-tab="overview">Översikt</button><button class="tab" data-tab="signals">Signaler</button><button class="tab" data-tab="method">Metod</button></div>
-<section class="card detail show" id="overview"><div class="alertrow"><div><div class="cardhead">BEVAKNING</div><div style="font-weight:650;margin-top:7px">Vi väntar på bekräftelse</div><div class="tiny" style="margin-top:5px">Ingen vändningssignal är aktiv i demo.</div></div><button class="btn" id="notify">Aktivera notiser</button></div></section>
-<section class="card detail" id="signals"><h2>Vad radar letar efter</h2><div class="list"><div class="rowitem"><span class="label">Tidigt tecken</span><span class="value">Säljtryck minskar</span></div><div class="rowitem"><span class="label">Momentum</span><span class="value">RSI åter över 50</span></div><div class="rowitem"><span class="label">Trendbrott</span><span class="value">20-dagars MA återtas</span></div><div class="rowitem"><span class="label">Bekräftelse</span><span class="value">50-dagars MA + volym</span></div></div></section>
-<section class="card detail" id="method"><h2>Poängmodell</h2><p><b>Sektor: 0–10</b> · ETF-flöden, ETF-trend, marknadsbredd, volym/momentum, ledande aktier.</p><p><b>Aktie: 0–12</b> · trend (20/50 MA), RSI, MACD, volym/RVOL, relativ styrka mot SOXX, bottenstruktur/utbrott.</p><p>0–3 svagt · 4–6 bevaka · 7–9 intressant · 10–12 stark setup.</p><p>Detta är endast regelbaserade indikatorer. De är inte en garanti eller köp-/säljsignal.</p></section>
-<div class="footer">Denna första version är en lokal PWA-prototyp. Kurser, poäng, grafer och signalstatus är DEMODATA.<br>Ingen live-feed, server eller bakgrundspush är inkopplad ännu.</div>
-</div>
-<script>
-// Mock sparklines, explicitly demo-only
-for(const el of document.querySelectorAll('.mini')){const vals=el.dataset.points.split(',').map(Number),w=150,h=35,min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;const pts=vals.map((v,i)=>`${i*w/(vals.length-1)},${h-3-(v-min)*(h-6)/range}`).join(' ');el.innerHTML=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="#f0c66b" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.detail').forEach(x=>x.classList.toggle('show',x.id===b.dataset.tab))}));
-const tickers={NVDA:'NVIDIA',MU:'Micron Technology',AMD:'Advanced Micro Devices',AVGO:'Broadcom'};
-document.querySelectorAll('.stock').forEach(c=>{const show=()=>alert(`${c.dataset.ticker} · ${tickers[c.dataset.ticker]}\nDemo-score: ${c.querySelector('strong').textContent}/12\n\nDetta är en prototyp med exempeldata. Liveindikatorer kopplas in i nästa steg.`);c.addEventListener('click',show);c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')show()})});
-document.getElementById('notify').addEventListener('click',async()=>{if(!('Notification' in window)){alert('Din webbläsare stöder inte notiser.');return;}const p=await Notification.requestPermission();alert(p==='granted'?'Notisbehörighet godkänd. Bakgrundsnotiser kopplas in när serverdelen är på plats.':'Notiser tillåtna inte just nu.')});
-if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 
-// Live endpoint (Netlify Function). API key stays on server environment.
-const liveBtn=document.getElementById('refresh-live');
-async function loadLive(){const status=document.getElementById('live-status'),box=document.getElementById('live-results');liveBtn.disabled=true;liveBtn.textContent='Hämtar…';status.textContent='Hämtar data från server…';box.innerHTML='';try{const resp=await fetch('/.netlify/functions/radar');const payload=await resp.json();if(!resp.ok)throw new Error(payload.error||'Serverfel');for(const r of payload.results){const card=document.createElement('div');card.className='metric';card.innerHTML=`<div class="mname">${r.symbol} · ${r.date||'Senaste'}</div><div class="mval">${r.latest.toFixed(2)} USD <span style="color:${r.changePct>=0?'var(--green)':'var(--red)'}">${r.changePct>=0?'+':''}${r.changePct.toFixed(2)}%</span></div><div class="tiny">MA20 ${r.ma20?.toFixed(2)??'—'} · MA50 ${r.ma50?.toFixed(2)??'—'} · RSI ${r.rsi?.toFixed(1)??'—'}</div><div class="tiny">Trendcheck ${r.score}/5</div>`;box.appendChild(card)}status.textContent='Live-data hämtad · '+new Date(payload.updatedAt).toLocaleString('sv-SE');}catch(e){status.textContent=e.message;box.innerHTML='<div class="metric"><div class="mval" style="color:var(--yellow)">Livekopplingen är ännu inte konfigurerad.</div><div class="tiny">Lägg in servernyckeln TWELVE_DATA_API_KEY i Netlify. Funktionen kräver deploy med Netlify Functions.</div></div>';}finally{liveBtn.disabled=false;liveBtn.textContent='Hämta live-data';}}
-liveBtn.addEventListener('click',loadLive);
-</script></body></html>
+<body>
+<div class="container">
+
+<header>
+ <div class="logo">AI</div>
+ <div>
+  <h1>Turnaround Radar</h1>
+  <div class="subtitle">AI & Semiconductor · Vändningsdetektor</div>
+ </div>
+</header>
+
+<div class="topbar">
+ <div class="toprow">
+  <div>
+   <strong>Marknadsscanner</strong>
+   <div class="status" id="status">Ansluter till live-data...</div>
+  </div>
+  <button id="refreshBtn" onclick="loadData()">↻ Uppdatera</button>
+ </div>
+ <div class="status" id="updated">Senaste uppdatering: –</div>
+</div>
+
+<div class="sectiontitle">Marknad</div>
+<div class="marketgrid" id="market"></div>
+
+<div class="sectiontitle">Vändningsradar</div>
+<div class="grid" id="stocks"></div>
+
+<div class="note">
+ <strong>Så läser du radarn</strong><br>
+ 0–1/5 = Svag · 2/5 = Tidiga tecken · 3/5 = Möjlig vändning ·
+ 4/5 = Stark signal · 5/5 = Alla kriterier uppfyllda.<br><br>
+ Scoren bygger på tekniska signaler som RSI, trend, momentum och volym där data finns.
+ Det är en indikator – inte en garanti eller köp-/säljrekommendation.
+</div>
+
+<div class="footer">AI Turnaround Radar · Live-data</div>
+</div>
+
+<script>
+const symbols = [
+ {symbol:"NVDA",name:"NVIDIA"},
+ {symbol:"AMD",name:"Advanced Micro Devices"},
+ {symbol:"MU",name:"Micron Technology"},
+ {symbol:"AVGO",name:"Broadcom"},
+ {symbol:"SOXX",name:"Semiconductor ETF"}
+];
+
+const marketSymbols=["SOXX","SMH"];
+let isLoading=false;
+
+function fmtPrice(value){
+ if(value===null || value===undefined || value==="" || !Number.isFinite(Number(value)))return "–";
+ return Number(value).toLocaleString("sv-SE",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function fmtPercent(value){
+ if(value===null || value===undefined || !Number.isFinite(Number(value)))return "–";
+ const n=Number(value);
+ return (n>0?"+":"")+n.toFixed(2)+"%";
+}
+function fmtNum(value,digits=2){
+ if(value===null || value===undefined || !Number.isFinite(Number(value)))return "–";
+ return Number(value).toFixed(digits);
+}
+function colorClass(value){
+ if(value===null || value===undefined || !Number.isFinite(Number(value)))return "gray";
+ return Number(value)>=0?"green":"red";
+}
+function getDataArray(data){
+ if(!data)return [];
+ if(Array.isArray(data))return data;
+ if(Array.isArray(data.results))return data.results;
+ if(Array.isArray(data.data))return data.data;
+ if(Array.isArray(data.stocks))return data.stocks;
+ if(Array.isArray(data.symbols))return data.symbols;
+ if(typeof data==="object"){
+  return Object.values(data).filter(v=>v&&typeof v==="object"&&!Array.isArray(v));
+ }
+ return [];
+}
+function normalizeSymbol(item){
+ return String(item?.symbol||item?.ticker||item?.name||"").toUpperCase();
+}
+function getValue(item,...keys){
+ for(const key of keys){
+  if(item && item[key]!==undefined && item[key]!==null && item[key]!==""){
+   const n=Number(item[key]);
+   if(Number.isFinite(n))return n;
+  }
+ }
+ return null;
+}
+function getHistory(item){
+ let history=item?.history||item?.prices||item?.data||item?.bars||item?.series;
+ if(!Array.isArray(history))return [];
+ return history.map(x=>getValue(x,"close","price","value")).filter(x=>x!==null);
+}
+function calculateRSI(values){
+ if(!Array.isArray(values)||values.length<15)return null;
+ let gains=0,losses=0;
+ for(let i=values.length-14;i<values.length;i++){
+  const diff=values[i]-values[i-1];
+  if(diff>0)gains+=diff;
+  else losses+=Math.abs(diff);
+ }
+ const avgGain=gains/14;
+ const avgLoss=losses/14;
+ if(avgLoss===0)return 100;
+ return 100-(100/(1+avgGain/avgLoss));
+}
+function calculateMA(values,period){
+ if(!values||values.length<period)return null;
+ const slice=values.slice(-period);
+ return slice.reduce((a,b)=>a+b,0)/period;
+}
+function calculateScore(item){
+ const history=getHistory(item);
+ const price=getValue(item,"latest","price","close","currentPrice","last");
+ const ma20=getValue(item,"MA20","ma20","sma20") ?? calculateMA(history,20);
+ const ma50=getValue(item,"MA50","ma50","sma50") ?? calculateMA(history,50);
+ const rsi=getValue(item,"RSI","rsi") ?? calculateRSI(history);
+ const change=getValue(item,"changePct","change_percent","percentChange","change");
+ const volume=item.volumeSignal ?? item.volume ?? null;
+
+ let score=0;
+ const checks=[];
+
+ if(price!==null && ma20!==null){
+  const ok=price>ma20;
+  if(ok)score++;
+  checks.push({name:"Pris över MA20",ok});
+ }
+ if(price!==null && ma50!==null){
+  const ok=price>ma50;
+  if(ok)score++;
+  checks.push({name:"Pris över MA50",ok});
+ }
+ if(ma20!==null && ma50!==null){
+  const ok=ma20>ma50;
+  if(ok)score++;
+  checks.push({name:"MA20 över MA50",ok});
+ }
+ if(rsi!==null){
+  const ok=rsi>=45 && rsi<=70;
+  if(ok)score++;
+  checks.push({name:"RSI i positiv zon",ok});
+ }
+ if(change!==null){
+  const ok=change>0;
+  if(ok)score++;
+  checks.push({name:"Positivt momentum",ok});
+ }else if(history.length>=2){
+  const ok=history[history.length-1]>history[history.length-2];
+  if(ok)score++;
+  checks.push({name:"Positivt momentum",ok});
+ }
+
+ return {score,checks,history,price,ma20,ma50,rsi,change};
+}
+function scoreText(score){
+ if(score<=1)return "Svag signal";
+ if(score===2)return "Tidiga tecken";
+ if(score===3)return "Möjlig vändning";
+ if(score===4)return "Stark signal";
+ return "Mycket stark signal";
+}
+function drawChart(canvas,values){
+ const ctx=canvas.getContext("2d");
+ const w=canvas.clientWidth;
+ const h=canvas.clientHeight;
+ canvas.width=w*devicePixelRatio;
+ canvas.height=h*devicePixelRatio;
+ ctx.scale(devicePixelRatio,devicePixelRatio);
+ ctx.clearRect(0,0,w,h);
+
+ if(!values||values.length<2){
+  ctx.fillStyle="#62758c";
+  ctx.font="12px Arial";
+  ctx.fillText("Chart-data saknas",8,30);
+  return;
+ }
+ const min=Math.min(...values);
+ const max=Math.max(...values);
+ const range=max-min||1;
+ const pad=8;
+ const points=values.map((v,i)=>({
+  x:pad+(i/(values.length-1))*(w-pad*2),
+  y:h-pad-((v-min)/range)*(h-pad*2)
+ }));
+ ctx.beginPath();
+ points.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+ ctx.lineWidth=2;
+ ctx.strokeStyle="#00d99b";
+ ctx.stroke();
+
+ ctx.lineTo(points[points.length-1].x,h);
+ ctx.lineTo(points[0].x,h);
+ ctx.closePath();
+ const gradient=ctx.createLinearGradient(0,0,0,h);
+ gradient.addColorStop(0,"rgba(0,217,155,0.22)");
+ gradient.addColorStop(1,"rgba(0,217,155,0)");
+ ctx.fillStyle=gradient;
+ ctx.fill();
+}
+function renderStockCard(symbol,raw){
+ const info=symbols.find(s=>s.symbol===symbol)||{symbol,name:symbol};
+ const item=raw||{};
+ const result=calculateScore(item);
+ const price=result.price;
+ const change=result.change;
+ const changeClass=colorClass(change);
+ const score=result.score;
+ const rsi=result.rsi;
+ const ma20=result.ma20;
+ const ma50=result.ma50;
+
+ const div=document.createElement("div");
+ div.className="card";
+
+ if(!raw || price===null){
+  div.innerHTML=`
+   <div class="cardhead"><div class="symbol">${info.symbol}</div></div>
+   <div class="company">${info.name}</div>
+   <div class="missing">Live-data saknas just nu</div>
+   <div class="status">Kontrollera API och Netlify-funktionen.</div>
+  `;
+  return div;
+ }
+
+ const changeDisplay=change!==null?fmtPercent(change):"–";
+ div.innerHTML=`
+  <div class="cardhead">
+   <div>
+    <div class="symbol">${info.symbol}</div>
+    <div class="company">${info.name}</div>
+   </div>
+   <div class="score">${score}/5</div>
+  </div>
+  <div class="price">${fmtPrice(price)}</div>
+  <div class="change ${changeClass}">${changeDisplay}</div>
+
+  <div class="scorewrap">
+   <div class="scorelabel">${scoreText(score)}</div>
+  </div>
+  <div class="bar"><div class="fill" style="width:${score*20}%"></div></div>
+
+  <div class="metrics">
+   <div class="metric">
+    <div class="metriclabel">RSI</div>
+    <div class="metricvalue">${fmtNum(rsi,1)}</div>
+   </div>
+   <div class="metric">
+    <div class="metriclabel">MA20</div>
+    <div class="metricvalue">${fmtPrice(ma20)}</div>
+   </div>
+   <div class="metric">
+    <div class="metriclabel">MA50</div>
+    <div class="metricvalue">${fmtPrice(ma50)}</div>
+   </div>
+  </div>
+
+  <div class="chartbox"><canvas></canvas></div>
+  <div class="checklist">
+   ${result.checks.map(c=>`
+    <div class="check">
+     <span>${c.name}</span>
+     <span class="${c.ok?"ok":"no"}">${c.ok?"✓":"✕"}</span>
+    </div>
+   `).join("")}
+  </div>
+ `;
+ const canvas=div.querySelector("canvas");
+ drawChart(canvas,result.history);
+ return div;
+}
+function renderMarket(items){
+ const market=document.getElementById("market");
+ market.innerHTML="";
+ for(const symbol of marketSymbols){
+  const item=items.find(x=>normalizeSymbol(x)===symbol);
+  if(!item)continue;
+  const price=getValue(item,"latest","price","close","currentPrice","last");
+  const change=getValue(item,"changePct","change_percent","percentChange","change");
+  const card=document.createElement("div");
+  card.className="marketcard";
+  card.innerHTML=`
+   <div class="marketname">${symbol}</div>
+   <div class="marketvalue">${fmtPrice(price)}</div>
+   <div class="marketdetail ${colorClass(change)}">${fmtPercent(change)}</div>
+  `;
+  market.appendChild(card);
+ }
+}
+function renderAll(data){
+ const items=getDataArray(data);
+ const stocks=document.getElementById("stocks");
+ stocks.innerHTML="";
+ const map={};
+ for(const item of items){
+  const sym=normalizeSymbol(item);
+  if(sym)map[sym]=item;
+ }
+ for(const info of symbols){
+  stocks.appendChild(renderStockCard(info.symbol,map[info.symbol]));
+ }
+ renderMarket(items);
+}
+async function loadData(){
+ if(isLoading)return;
+ isLoading=true;
+ const btn=document.getElementById("refreshBtn");
+ const status=document.getElementById("status");
+ btn.disabled=true;
+ status.textContent="Hämtar data...";
+ try{
+  const response=await fetch("/.netlify/functions/radar?refresh="+Date.now(),{
+   cache:"no-store",
+   headers:{"Accept":"application/json"}
+  });
+  if(!response.ok){
+   throw new Error("Server svarade "+response.status);
+  }
+  const data=await response.json();
+  renderAll(data);
+  status.textContent="Live-data hämtad";
+  document.getElementById("updated").textContent=
+   "Senaste uppdatering: "+new Date().toLocaleTimeString("sv-SE");
+ }catch(error){
+  console.error(error);
+  status.textContent="Kunde inte hämta live-data";
+  document.getElementById("updated").textContent=
+   "Fel: "+error.message;
+  const stocks=document.getElementById("stocks");
+  if(!stocks.innerHTML){
+   stocks.innerHTML="<div class='card wide'><div class='missing'>Kunde inte ansluta till live-data. Kontrollera Netlify och API-inställningar.</div></div>";
+  }
+ }finally{
+  isLoading=false;
+  btn.disabled=false;
+ }
+}
+
+// Starta direkt
+loadData();
+
+// Automatisk uppdatering var 15:e minut
+setInterval(loadData,15*60*1000);
+</script>
+</body>
+</html>
