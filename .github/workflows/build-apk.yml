@@ -1,4 +1,4 @@
-name: Build AI Trading APK
+name: Build AI Radar APK
 
 on:
   workflow_dispatch:
@@ -11,37 +11,51 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: '21'
 
-      - name: Create Capacitor project files
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Create Android app
         run: |
-          echo '{"name":"ai-trading","version":"1.0.0","private":true}' > package.json
-          echo '{"appId":"com.aitrading.radar","appName":"AI Trading","webDir":".","server":{"androidScheme":"https"}}' > capacitor.config.json
+          mkdir apk-project
+          cd apk-project
+          npm init -y
+          npm install @capacitor/core @capacitor/android
+          npm install --save-dev @capacitor/cli
 
-      - name: Install Capacitor
-        run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+          mkdir www
+          echo '<html><body></body></html>' > www/index.html
 
-      - name: Add Android
-        run: npx cap add android
+          cat > capacitor.config.json <<'EOF'
+          {
+            "appId": "com.airadar.trading",
+            "appName": "AI Radar",
+            "webDir": "www",
+            "server": {
+              "url": "https://regal-nasturtium-72dbc0.netlify.app",
+              "cleartext": false
+            }
+          }
+          EOF
+
+          npx cap add android
+          npx cap sync android
 
       - name: Build APK
         run: |
-          cd android
+          cd apk-project/android
           chmod +x gradlew
           ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: AI-Trading-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: AI-Radar-APK
+          path: apk-project/android/app/build/outputs/apk/debug/app-debug.apk
