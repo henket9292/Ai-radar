@@ -2,6 +2,9 @@ name: Build AI Radar APK
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
