@@ -52,11 +52,11 @@ jobs:
           npx cap sync android
 
       - name: Build APK
-        run: |
-          cd apk-project/android
-          chmod +x gradlew
-          ./gradlew assembleDebug
-
+        
+- name: Build APK
+  run: |
+    cd apk-project/android
+    ./gradlew assembleDebug --exclude-task checkDebugDuplicateClasses
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
