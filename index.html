@@ -379,9 +379,9 @@ function renderStocks(data) {
     const score = item.score != null ? Number(item.score) : null;
     const price = item.price ?? item.latest;
     const change = item.changePct ?? item.change;
-    const rsi = item.rsi;
-    const ma20 = item.ma20;
-    const ma50 = item.ma50;
+    const rsi = item.rsi ?? item.RSI;
+const ma20 = item.ma20 ?? item.MA20;
+const ma50 = item.ma50 ?? item.MA50;
 
     return `
       <div class="stock-card">
