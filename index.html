@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -22,50 +21,50 @@ body {
 .container {
   max-width: 900px;
   margin: auto;
-  padding: 18px;
+  padding: 16px;
 }
+
+/* HEADER */
 
 header {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin: 12px 0 28px;
+  gap: 13px;
+  margin: 12px 0 20px;
 }
 
 .logo {
-  width: 66px;
-  height: 66px;
-  border-radius: 20px;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 17px;
   background: linear-gradient(135deg,#00d99b,#1675ff);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
 }
 
 h1 {
-  font-size: 25px;
+  font-size: 23px;
   margin: 0;
 }
 
 .subtitle {
   color: #91a6bc;
-  margin-top: 7px;
-  font-size: 14px;
+  margin-top: 6px;
+  font-size: 13px;
 }
+
+/* STATUS */
 
 .card {
   background: #0b1c2b;
   border: 1px solid #1b3348;
-  border-radius: 22px;
-  padding: 20px;
-  margin-bottom: 18px;
-}
-
-.section-title {
-  font-size: 22px;
-  margin: 26px 0 16px;
+  border-radius: 19px;
+  padding: 18px;
+  margin-bottom: 16px;
 }
 
 .status {
@@ -73,22 +72,21 @@ h1 {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
 }
 
 .status-text {
   color: #9aafc3;
-  font-size: 14px;
-  margin-top: 8px;
+  font-size: 13px;
+  margin-top: 7px;
 }
 
 button {
   border: none;
-  border-radius: 13px;
-  padding: 14px 18px;
+  border-radius: 12px;
+  padding: 12px 15px;
   background: #00d99b;
   color: #04131c;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -97,23 +95,77 @@ button:disabled {
   opacity: 0.5;
 }
 
-.market-grid {
+.error {
+  color: #ff8b96;
+  font-size: 13px;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+
+/* NAVIGATION */
+
+.navigation {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 20px 0;
+  padding: 6px;
+  background: #0b1c2b;
+  border: 1px solid #1b3348;
+  border-radius: 16px;
+}
+
+.nav-button {
+  background: transparent;
+  color: #92a9bf;
+  padding: 12px 5px;
+  border-radius: 11px;
+  font-size: 13px;
+}
+
+.nav-button.active {
+  background: #1675ff;
+  color: white;
+}
+
+/* SECTIONS */
+
+.page-section {
+  display: none;
+}
+
+.page-section.active {
+  display: block;
+}
+
+.section-title {
+  font-size: 21px;
+  margin: 22px 0 14px;
+}
+
+.section-description {
+  color: #91a6bc;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+/* GRIDS */
+
+.market-grid,
+.stock-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
-.stock-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
+/* STOCK CARDS */
 
 .stock-card {
   background: #0b1c2b;
   border: 1px solid #1b3348;
-  border-radius: 18px;
-  padding: 17px;
+  border-radius: 17px;
+  padding: 16px;
   min-width: 0;
 }
 
@@ -124,15 +176,15 @@ button:disabled {
 
 .symbol {
   color: #90a6bd;
-  font-size: 13px;
+  font-size: 12px;
   margin-top: 5px;
 }
 
 .price {
   font-size: 23px;
   font-weight: bold;
-  margin-top: 16px;
-  word-break: break-word;
+  margin-top: 15px;
+  overflow-wrap: anywhere;
 }
 
 .change {
@@ -153,8 +205,10 @@ button:disabled {
   color: #9aafc3;
 }
 
+/* SCORE */
+
 .score {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: bold;
   margin: 12px 0;
 }
@@ -162,6 +216,7 @@ button:disabled {
 .score-label {
   font-size: 13px;
   color: #91a6bc;
+  line-height: 1.5;
 }
 
 .score-bar {
@@ -176,23 +231,43 @@ button:disabled {
   height: 100%;
   background: linear-gradient(90deg,#1675ff,#00d99b);
   border-radius: 10px;
-  width: 0%;
   transition: width .4s;
 }
 
 .details {
   color: #a5b8cc;
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 1.8;
   margin-top: 12px;
 }
 
-.error {
-  color: #ff8b96;
-  font-size: 14px;
-  margin-top: 10px;
-  word-break: break-word;
+/* OVERVIEW */
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
+
+.overview-card {
+  background: #0b1c2b;
+  border: 1px solid #1b3348;
+  border-radius: 17px;
+  padding: 16px;
+}
+
+.overview-card .label {
+  font-size: 12px;
+  color: #91a6bc;
+}
+
+.overview-card .value {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 9px;
+}
+
+/* INFO */
 
 .info {
   color: #9aafc3;
@@ -200,21 +275,45 @@ button:disabled {
   font-size: 14px;
 }
 
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-item {
+  padding: 12px;
+  background: #102436;
+  border-radius: 12px;
+}
+
+.info-item strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #e8f1ff;
+}
+
 .footer {
   text-align: center;
   padding: 28px 10px;
   color: #627b92;
-  font-size: 13px;
+  font-size: 12px;
 }
+
+/* MOBILE */
 
 @media (max-width: 480px) {
   .container {
-    padding: 14px;
+    padding: 12px;
   }
 
-  .market-grid,
-  .stock-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .navigation {
+    gap: 4px;
+  }
+
+  .nav-button {
+    font-size: 12px;
+    padding: 11px 3px;
   }
 
   .stock-card {
@@ -226,7 +325,7 @@ button:disabled {
   }
 
   h1 {
-    font-size: 23px;
+    font-size: 21px;
   }
 }
 </style>
@@ -236,6 +335,8 @@ button:disabled {
 
 <div class="container">
 
+<!-- HEADER -->
+
 <header>
   <div class="logo">AI</div>
   <div>
@@ -244,6 +345,8 @@ button:disabled {
   </div>
 </header>
 
+<!-- LIVE STATUS -->
+
 <div class="card">
   <div class="status">
     <div>
@@ -251,74 +354,251 @@ button:disabled {
       <div id="status" class="status-text">Ansluter...</div>
       <div id="lastUpdate" class="status-text"></div>
     </div>
-    <button id="refreshBtn" onclick="loadData()">↻ Uppdatera</button>
+
+    <button id="refreshBtn">↻ Uppdatera</button>
   </div>
+
   <div id="error" class="error"></div>
 </div>
 
-<h2 class="section-title">Marknad</h2>
+<!-- NAVIGATION -->
 
-<div class="market-grid" id="market">
-  <div class="stock-card">
-    <div class="stock-name">SOXX</div>
-    <div class="symbol">Semiconductor ETF</div>
-    <div class="price">--</div>
-    <div class="change neutral">Inväntar data</div>
+<nav class="navigation">
+  <button class="nav-button active" data-page="overview">Översikt</button>
+  <button class="nav-button" data-page="market">Marknad</button>
+  <button class="nav-button" data-page="stocks">Aktier</button>
+  <button class="nav-button" data-page="signals">Signaler</button>
+</nav>
+
+<!-- ========================= -->
+<!-- OVERVIEW -->
+<!-- ========================= -->
+
+<section id="overview" class="page-section active">
+
+  <h2 class="section-title">Marknadsöversikt</h2>
+
+  <div class="overview-grid" id="overviewMarket">
+
+    <div class="overview-card">
+      <div class="label">SOXX</div>
+      <div class="value" id="overviewSOXX">--</div>
+      <div class="change neutral" id="overviewSOXXchange">Inväntar data</div>
+    </div>
+
+    <div class="overview-card">
+      <div class="label">SMH</div>
+      <div class="value" id="overviewSMH">--</div>
+      <div class="change neutral" id="overviewSMHchange">Inväntar data</div>
+    </div>
+
   </div>
-  <div class="stock-card">
-    <div class="stock-name">SMH</div>
-    <div class="symbol">Semiconductor ETF</div>
-    <div class="price">--</div>
-    <div class="change neutral">Inväntar data</div>
+
+  <h2 class="section-title">AI-aktier</h2>
+
+  <div class="stock-grid" id="overviewStocks"></div>
+
+  <div class="card" style="margin-top:18px">
+
+    <strong>Vad letar radarn efter?</strong>
+
+    <div class="info" style="margin-top:10px">
+      Radarn försöker identifiera när AI- och halvledaraktier
+      börjar visa tecken på återhämtning efter svaghet.
+
+      <br><br>
+
+      Den tittar bland annat på prisutveckling, RSI,
+      trend och glidande medelvärden där data finns.
+
+      <br><br>
+
+      <strong>Fokus:</strong> Upptäcka tidiga tecken på en
+      potentiell vändning innan en tydlig trend har etablerats.
+    </div>
+
   </div>
-</div>
 
-<h2 class="section-title">Vändningsradar</h2>
+</section>
 
-<div class="stock-grid" id="stocks">
-  <div class="stock-card"><strong>NVDA</strong><div class="price">--</div></div>
-  <div class="stock-card"><strong>AMD</strong><div class="price">--</div></div>
-  <div class="stock-card"><strong>MU</strong><div class="price">--</div></div>
-  <div class="stock-card"><strong>AVGO</strong><div class="price">--</div></div>
-</div>
+<!-- ========================= -->
+<!-- MARKET -->
+<!-- ========================= -->
 
-<div class="card" style="margin-top:20px">
-  <strong>Så läser du radarn</strong>
-  <div class="info">
-    0–1/5 = Svag signal · 2/5 = Tidiga tecken ·
-    3/5 = Möjlig vändning · 4/5 = Stark signal ·
-    5/5 = Alla kriterier uppfyllda.
-    <br><br>
-    Scoren bygger på tekniska signaler som RSI, trend,
-    momentum och volym där data finns. Det är en indikator,
-    inte en garanti eller köp-/säljrekommendation.
+<section id="market" class="page-section">
+
+  <h2 class="section-title">Marknad & sektor</h2>
+
+  <div class="section-description">
+    Följ halvledarsektorn genom ETF:er som speglar
+    den bredare marknadsutvecklingen.
   </div>
-</div>
+
+  <div class="market-grid" id="marketCards"></div>
+
+  <div class="card" style="margin-top:18px">
+
+    <strong>Varför följa ETF:erna?</strong>
+
+    <div class="info" style="margin-top:10px">
+      ETF:erna kan hjälpa oss se om en eventuell vändning
+      sker i hela halvledarsektorn eller bara i enstaka aktier.
+
+      <br><br>
+
+      Om sektorn stärks samtidigt som flera stora aktier
+      visar positiva signaler kan det vara ett bredare
+      tecken på återhämtning.
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ========================= -->
+<!-- STOCKS -->
+<!-- ========================= -->
+
+<section id="stocks" class="page-section">
+
+  <h2 class="section-title">AI & Semiconductor</h2>
+
+  <div class="section-description">
+    Individuell utveckling för de fyra aktier som radarn bevakar.
+  </div>
+
+  <div class="stock-grid" id="stockCards"></div>
+
+</section>
+
+<!-- ========================= -->
+<!-- SIGNALS -->
+<!-- ========================= -->
+
+<section id="signals" class="page-section">
+
+  <h2 class="section-title">Vändningssignaler</h2>
+
+  <div class="section-description">
+    Teknisk analys och signalstyrka för varje bevakad aktie.
+  </div>
+
+  <div class="stock-grid" id="signalCards"></div>
+
+  <div class="card" style="margin-top:18px">
+
+    <strong>Så läser du signalerna</strong>
+
+    <div class="info-list" style="margin-top:14px">
+
+      <div class="info-item">
+        <strong>0–1/5 · Svag signal</strong>
+        Få positiva tekniska tecken.
+      </div>
+
+      <div class="info-item">
+        <strong>2/5 · Tidiga tecken</strong>
+        Börjar visa möjliga förbättringar.
+      </div>
+
+      <div class="info-item">
+        <strong>3/5 · Möjlig vändning</strong>
+        Flera indikatorer pekar åt rätt håll.
+      </div>
+
+      <div class="info-item">
+        <strong>4/5 · Stark signal</strong>
+        Flera tekniska faktorer stödjer återhämtning.
+      </div>
+
+      <div class="info-item">
+        <strong>5/5 · Alla kriterier</strong>
+        Samtliga signaler som radarn mäter är uppfyllda.
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <strong>Indikatorer</strong>
+
+    <div class="info" style="margin-top:10px">
+      <strong>RSI</strong> – hjälper identifiera momentum
+      och potentiellt överköpta eller översålda nivåer.
+
+      <br><br>
+
+      <strong>MA20</strong> – kortare trend.
+
+      <br><br>
+
+      <strong>MA50</strong> – medellång trend.
+
+      <br><br>
+
+      <strong>Score</strong> – sammanvägning av de signaler
+      som finns tillgängliga i radarns beräkning.
+    </div>
+
+  </div>
+
+</section>
+
+<!-- FOOTER -->
 
 <div class="footer">
   AI Turnaround Radar · Live-data
+  <br>
+  Uppdatering var 15:e minut
 </div>
 
 </div>
 
 <script>
-const API_URL = "https://airadar.henrikt123.workers.dev/api/radar";
+
+/* =========================
+   API
+========================= */
+
+const API_URL =
+"https://airadar.henrikt123.workers.dev/api/radar";
 
 const symbols = ["NVDA", "AMD", "MU", "AVGO", "SOXX", "SMH"];
 
+const stockSymbols = ["NVDA", "AMD", "MU", "AVGO"];
+
+const marketSymbols = ["SOXX", "SMH"];
+
+
+/* =========================
+   FORMAT FUNCTIONS
+========================= */
+
 function formatPrice(value) {
-  if (value == null || !Number.isFinite(Number(value))) return "--";
+  if (value == null || !Number.isFinite(Number(value))) {
+    return "--";
+  }
+
   return "$" + Number(value).toFixed(2);
 }
 
 function formatChange(value) {
-  if (value == null || !Number.isFinite(Number(value))) return "--";
+  if (value == null || !Number.isFinite(Number(value))) {
+    return "--";
+  }
+
   const n = Number(value);
+
   return (n >= 0 ? "+" : "") + n.toFixed(2) + "%";
 }
 
 function changeClass(value) {
-  if (value == null || !Number.isFinite(Number(value))) return "neutral";
+  if (value == null || !Number.isFinite(Number(value))) {
+    return "neutral";
+  }
+
   return Number(value) >= 0 ? "green" : "red";
 }
 
@@ -328,100 +608,270 @@ function scoreLabel(score) {
   if (score === 2) return "Tidiga tecken";
   if (score === 3) return "Möjlig vändning";
   if (score === 4) return "Stark signal";
+
   return "Alla kriterier uppfyllda";
 }
 
+
+/* =========================
+   NAVIGATION
+========================= */
+
+document.querySelectorAll(".nav-button").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    const page = button.dataset.page;
+
+    document.querySelectorAll(".nav-button").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    document.querySelectorAll(".page-section").forEach(section => {
+      section.classList.remove("active");
+    });
+
+    document.getElementById(page).classList.add("active");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  });
+
+});
+
+
+/* =========================
+   MARKET CARDS
+========================= */
+
 function renderMarket(data) {
-  const marketSymbols = ["SOXX", "SMH"];
-  const marketEl = document.getElementById("market");
+
+  const marketEl = document.getElementById("marketCards");
 
   marketEl.innerHTML = marketSymbols.map(symbol => {
+
     const item = data[symbol];
+
     if (!item) {
+
       return `
         <div class="stock-card">
           <div class="stock-name">${symbol}</div>
           <div class="symbol">Semiconductor ETF</div>
           <div class="price">--</div>
           <div class="change neutral">Data saknas</div>
-        </div>`;
+        `;
+
     }
+
+    const price = item.price ?? item.latest;
+    const change = item.changePct ?? item.change;
 
     return `
       <div class="stock-card">
         <div class="stock-name">${symbol}</div>
         <div class="symbol">Semiconductor ETF</div>
-        <div class="price">${formatPrice(item.price ?? item.latest)}</div>
-        <div class="change ${changeClass(item.changePct ?? item.change)}">
-          ${formatChange(item.changePct ?? item.change)}
-        </div>
-      </div>`;
-  }).join("");
-}
-
-function renderStocks(data) {
-  const stockEl = document.getElementById("stocks");
-  const stockSymbols = ["NVDA", "AMD", "MU", "AVGO"];
-
-  stockEl.innerHTML = stockSymbols.map(symbol => {
-    const item = data[symbol];
-
-    if (!item) {
-      return `
-        <div class="stock-card">
-          <div class="stock-name">${symbol}</div>
-          <div class="symbol">Data saknas</div>
-          <div class="price">--</div>
-          <div class="score-label">Inväntar data</div>
-        </div>`;
-    }
-
-    const score = item.score != null ? Number(item.score) : null;
-    const price = item.price ?? item.latest;
-    const change = item.changePct ?? item.change;
-    const rsi = item.rsi ?? item.RSI;
-const ma20 = item.ma20 ?? item.MA20;
-const ma50 = item.ma50 ?? item.MA50;
-
-    return `
-      <div class="stock-card">
-        <div class="stock-name">${symbol}</div>
-        <div class="symbol">AI / Semiconductor</div>
 
         <div class="price">${formatPrice(price)}</div>
 
         <div class="change ${changeClass(change)}">
           ${formatChange(change)}
         </div>
+      </div>
+    `;
 
-        <div class="score">
-          ${score == null ? "--" : score + "/5"}
-        </div>
-
-        <div class="score-label">
-          ${scoreLabel(score)}
-        </div>
-
-        <div class="score-bar">
-          <div class="score-fill" style="width:${score == null ? 0 : Math.max(0,Math.min(5,score))*20}%"></div>
-        </div>
-
-        <div class="details">
-          RSI: ${rsi == null ? "--" : Number(rsi).toFixed(1)}<br>
-          MA20: ${ma20 == null ? "--" : formatPrice(ma20)}<br>
-          MA50: ${ma50 == null ? "--" : formatPrice(ma50)}
-        </div>
-      </div>`;
   }).join("");
+
 }
 
+
+/* =========================
+   OVERVIEW MARKET
+========================= */
+
+function renderOverviewMarket(data) {
+
+  marketSymbols.forEach(symbol => {
+
+    const item = data[symbol];
+
+    const priceEl = document.getElementById("overview" + symbol);
+    const changeEl = document.getElementById("overview" + symbol + "change");
+
+    if (!item) {
+      priceEl.textContent = "--";
+      changeEl.textContent = "Data saknas";
+      changeEl.className = "change neutral";
+      return;
+    }
+
+    const price = item.price ?? item.latest;
+    const change = item.changePct ?? item.change;
+
+    priceEl.textContent = formatPrice(price);
+
+    changeEl.textContent = formatChange(change);
+    changeEl.className = "change " + changeClass(change);
+
+  });
+
+}
+
+
+/* =========================
+   STOCK CARDS
+========================= */
+
+function renderStockCard(symbol, item, detailed = false) {
+
+  if (!item) {
+
+    return `
+      <div class="stock-card">
+        <div class="stock-name">${symbol}</div>
+        <div class="symbol">Data saknas</div>
+        <div class="price">--</div>
+        <div class="score-label">Inväntar data</div>
+      </div>
+    `;
+
+  }
+
+  const score = item.score != null
+    ? Number(item.score)
+    : null;
+
+  const price = item.price ?? item.latest;
+
+  const change = item.changePct ?? item.change;
+
+  const rsi = item.rsi ?? item.RSI;
+
+  const ma20 = item.ma20 ?? item.MA20;
+
+  const ma50 = item.ma50 ?? item.MA50;
+
+  return `
+    <div class="stock-card">
+
+      <div class="stock-name">${symbol}</div>
+
+      <div class="symbol">AI / Semiconductor</div>
+
+      <div class="price">${formatPrice(price)}</div>
+
+      <div class="change ${changeClass(change)}">
+        ${formatChange(change)}
+      </div>
+
+      <div class="score">
+        ${score == null ? "--" : score + "/5"}
+      </div>
+
+      <div class="score-label">
+        ${scoreLabel(score)}
+      </div>
+
+      <div class="score-bar">
+        <div class="score-fill"
+          style="width:${score == null ? 0 : Math.max(0,Math.min(5,score))*20}%">
+        </div>
+      </div>
+
+      ${
+        detailed
+        ? `
+          <div class="details">
+            RSI: ${rsi == null ? "--" : Number(rsi).toFixed(1)}<br>
+            MA20: ${ma20 == null ? "--" : formatPrice(ma20)}<br>
+            MA50: ${ma50 == null ? "--" : formatPrice(ma50)}
+          </div>
+        `
+        : ""
+      }
+
+    </div>
+  `;
+
+}
+
+
+/* =========================
+   OVERVIEW STOCKS
+========================= */
+
+function renderOverviewStocks(data) {
+
+  const el = document.getElementById("overviewStocks");
+
+  el.innerHTML = stockSymbols.map(symbol => {
+
+    return renderStockCard(symbol, data[symbol], false);
+
+  }).join("");
+
+}
+
+
+/* =========================
+   FULL STOCKS
+========================= */
+
+function renderStocks(data) {
+
+  const el = document.getElementById("stockCards");
+
+  el.innerHTML = stockSymbols.map(symbol => {
+
+    return renderStockCard(symbol, data[symbol], true);
+
+  }).join("");
+
+}
+
+
+/* =========================
+   SIGNALS
+========================= */
+
+function renderSignals(data) {
+
+  const el = document.getElementById("signalCards");
+
+  el.innerHTML = stockSymbols.map(symbol => {
+
+    return renderStockCard(symbol, data[symbol], true);
+
+  }).join("");
+
+}
+
+
+/* =========================
+   NORMALIZE API RESPONSE
+========================= */
+
 function normalizeResponse(json) {
+
   if (json.results && Array.isArray(json.results)) {
+
     const obj = {};
+
     json.results.forEach(item => {
-      if (item.symbol) obj[item.symbol] = item;
+
+      if (item.symbol) {
+        obj[item.symbol] = item;
+      }
+
     });
+
     return obj;
+
   }
 
   if (json.results && typeof json.results === "object") {
@@ -429,72 +879,115 @@ function normalizeResponse(json) {
   }
 
   if (json.data && Array.isArray(json.data)) {
+
     const obj = {};
+
     json.data.forEach(item => {
-      if (item.symbol) obj[item.symbol] = item;
+
+      if (item.symbol) {
+        obj[item.symbol] = item;
+      }
+
     });
+
     return obj;
+
   }
 
   return json;
+
 }
 
-  if (json.data && Array.isArray(json.data)) {
-    const obj = {};
-    json.data.forEach(item => {
-      if (item.symbol) obj[item.symbol] = item;
-    });
-    return obj;
-  }
 
-  return json;
-}
+/* =========================
+   LOAD DATA
+========================= */
 
 async function loadData() {
+
   const status = document.getElementById("status");
+
   const error = document.getElementById("error");
+
   const btn = document.getElementById("refreshBtn");
 
   status.textContent = "Hämtar data...";
+
   error.textContent = "";
+
   btn.disabled = true;
 
   try {
-    const response = await fetch(API_URL + "?t=" + Date.now(), {
-      cache: "no-store"
-    });
+
+    const response = await fetch(
+      API_URL + "?t=" + Date.now(),
+      {
+        cache: "no-store"
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Server svarade " + response.status);
     }
 
     const json = await response.json();
+
     const data = normalizeResponse(json);
 
+    /* Render all sections */
+
     renderMarket(data);
+
+    renderOverviewMarket(data);
+
+    renderOverviewStocks(data);
+
     renderStocks(data);
 
+    renderSignals(data);
+
     status.textContent = "Live-data ansluten";
+
     document.getElementById("lastUpdate").textContent =
-      "Senast uppdaterad: " + new Date().toLocaleTimeString("sv-SE");
+      "Senast uppdaterad: " +
+      new Date().toLocaleTimeString("sv-SE");
 
   } catch (err) {
+
     status.textContent = "Kunde inte hämta live-data";
+
     error.textContent = "Fel: " + err.message;
 
   } finally {
+
     btn.disabled = false;
+
   }
+
 }
 
-// Uppdatera manuellt
-document.getElementById("refreshBtn").addEventListener("click", loadData);
 
-// Automatisk uppdatering var 15:e minut
+/* =========================
+   BUTTON
+========================= */
+
+document.getElementById("refreshBtn")
+  .addEventListener("click", loadData);
+
+
+/* =========================
+   AUTO UPDATE
+========================= */
+
 setInterval(loadData, 15 * 60 * 1000);
 
-// Start
+
+/* =========================
+   START
+========================= */
+
 loadData();
+
 </script>
 
 </body>
