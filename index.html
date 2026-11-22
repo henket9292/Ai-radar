@@ -3,1111 +3,540 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<meta name="description" content="AI Turnaround Radar – AI och halvledare.">
+<meta name="description" content="AI Turnaround Radar – bevaka vändningar i AI och halvledare.">
 <title>AI Turnaround Radar</title>
 
 <style>
-:root {
-  --bg: #07111f;
-  --card: #0c1b2b;
-  --card2: #102235;
-  --border: #1c344b;
-  --text: #e8f0fa;
-  --muted: #91a6bb;
-  --green: #00d5a0;
-  --yellow: #f0c96b;
-  --red: #f07885;
-  --blue: #2585ff;
+:root{
+  --bg:#07111f;
+  --panel:#0d1b2b;
+  --panel2:#102235;
+  --border:#20354b;
+  --text:#e7eef7;
+  --muted:#91a6bc;
+  --cyan:#41d4e8;
+  --green:#44d39a;
+  --yellow:#f2c66d;
+  --red:#f07883;
 }
-
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
 }
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
-  padding: 18px;
+header{padding:24px 20px 12px}
+.brand{display:flex;gap:14px;align-items:center}
+.logo{
+  width:58px;height:58px;border-radius:18px;
+  border:1px solid #24506b;background:#10283c;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cyan);font-size:28px;
 }
-
-.app {
-  max-width: 1000px;
-  margin: auto;
+h1{font-size:24px;margin:0;font-weight:800}
+.subtitle{color:var(--muted);margin-top:3px}
+.status{
+  margin:16px 0 0;display:inline-flex;align-items:center;gap:8px;
+  padding:8px 12px;border:1px solid var(--border);
+  border-radius:30px;font-size:12px;color:var(--muted);
 }
-
-.header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin: 12px 0 25px;
+.dot{width:8px;height:8px;border-radius:50%;background:var(--yellow)}
+.dot.live{background:var(--green)}
+nav{
+  display:flex;gap:8px;overflow-x:auto;padding:12px 16px;
+  border-bottom:1px solid var(--border);position:sticky;top:0;
+  background:var(--bg);z-index:5;
 }
-
-.logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 20px;
-  display: grid;
-  place-items: center;
-  font-size: 28px;
-  font-weight: bold;
-  background: linear-gradient(135deg,#00c8b0,#0879ff);
+nav button{
+  border:1px solid var(--border);background:var(--panel);
+  color:var(--muted);border-radius:12px;padding:10px 14px;
+  white-space:nowrap;font-size:14px;
 }
-
-h1 {
-  margin: 0;
-  font-size: 25px;
+nav button.active{color:var(--cyan);border-color:#2b8094;background:#10283b}
+main{padding:16px;max-width:900px;margin:auto}
+.page{display:none}
+.page.active{display:block}
+.card{
+  background:linear-gradient(145deg,var(--panel),#0a1827);
+  border:1px solid var(--border);border-radius:22px;
+  padding:20px;margin-bottom:16px;
 }
-
-.subtitle {
-  color: var(--muted);
-  margin-top: 5px;
-  line-height: 1.4;
+.card-title{
+  display:flex;justify-content:space-between;gap:12px;
+  color:var(--muted);font-size:14px;text-transform:uppercase;
 }
-
-.status-pill {
-  margin-left: auto;
-  background: #102b3e;
-  border: 1px solid var(--border);
-  color: #9cb7cc;
-  border-radius: 25px;
-  padding: 9px 12px;
-  font-size: 12px;
-  white-space: nowrap;
+.big-score{font-size:56px;font-weight:800;margin:20px 0 4px}
+.big-score small{font-size:24px;color:var(--muted);font-weight:500}
+.pill{
+  display:inline-block;padding:9px 13px;border-radius:30px;
+  font-weight:700;font-size:14px;margin:4px 0 18px;
+  background:#292619;color:var(--yellow);
 }
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 22px;
-  margin-bottom: 18px;
+.pill.good{background:#102c25;color:var(--green)}
+.pill.bad{background:#2c1822;color:var(--red)}
+.progress{height:9px;border-radius:20px;background:#20354b;overflow:hidden}
+.progress span{display:block;height:100%;background:var(--cyan);border-radius:20px}
+.note{font-size:13px;color:var(--muted);margin-top:14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stat{
+  background:#0a1929;border:1px solid #1c3348;border-radius:16px;padding:16px;
 }
-
-.card-title {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 18px;
+.stat label{display:block;color:var(--muted);font-size:13px;margin-bottom:7px}
+.stat strong{font-size:17px}
+.good-text{color:var(--green)}
+.bad-text{color:var(--red)}
+.neutral-text{color:var(--yellow)}
+.section-heading{font-size:18px;font-weight:800;margin:24px 0 14px}
+.stock-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stock{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:18px;padding:16px;cursor:pointer;
 }
-
-.refresh-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.stock h3{margin:0;font-size:20px}
+.stock .name{color:var(--muted);font-size:13px;margin-top:3px}
+.price{font-size:26px;font-weight:800;margin-top:15px}
+.change{font-size:13px;margin-top:5px}
+.spark{height:45px;margin:12px 0 4px}
+.spark svg{width:100%;height:100%}
+.stock-foot{font-size:13px;color:var(--muted)}
+.detail{
+  display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);
+  color:var(--muted);font-size:13px;line-height:1.7;
 }
-
-.refresh-btn {
-  border: 0;
-  background: var(--green);
-  color: #06201c;
-  font-weight: bold;
-  font-size: 16px;
-  border-radius: 18px;
-  padding: 15px 22px;
-  cursor: pointer;
+.stock.open .detail{display:block}
+.signal-row{
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid var(--border);padding:13px 0;
 }
-
-.refresh-btn:disabled {
-  opacity: .5;
+.signal-row:last-child{border-bottom:0}
+.signal-row span{color:var(--muted)}
+.btn{
+  background:#123247;color:var(--cyan);border:1px solid #285a75;
+  border-radius:12px;padding:12px 15px;font-weight:700;
 }
-
-.connection {
-  color: var(--muted);
-  line-height: 1.5;
-  font-size: 14px;
+.toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:14px}
+.small{font-size:12px;color:var(--muted)}
+.error{
+  background:#321b23;border:1px solid #67303b;color:#ffb6c0;
+  padding:14px;border-radius:14px;margin:12px 0;
 }
-
-.error {
-  color: var(--red);
-  margin-top: 12px;
-  line-height: 1.5;
-}
-
-.success {
-  color: var(--green);
-}
-
-.tabs {
-  display: flex;
-  overflow-x: auto;
-  gap: 8px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 8px;
-  margin: 20px 0 25px;
-}
-
-.tab {
-  border: 0;
-  border-radius: 15px;
-  background: transparent;
-  color: var(--muted);
-  padding: 14px 20px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.tab.active {
-  background: var(--blue);
-  color: white;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-h2 {
-  margin: 24px 0 16px;
-  font-size: 23px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 16px;
-}
-
-.grid3 {
-  grid-template-columns: repeat(3,minmax(0,1fr));
-}
-
-.metric {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 20px;
-  min-width: 0;
-}
-
-.metric-label {
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.metric-value {
-  font-size: 30px;
-  font-weight: bold;
-  margin: 15px 0 8px;
-}
-
-.metric-sub {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.score-big {
-  font-size: 58px;
-  font-weight: bold;
-  margin: 25px 0 10px;
-}
-
-.signal {
-  display: inline-block;
-  padding: 10px 15px;
-  border-radius: 25px;
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-.signal.green {
-  color: var(--green);
-  background: #123329;
-}
-
-.signal.yellow {
-  color: var(--yellow);
-  background: #302817;
-}
-
-.signal.red {
-  color: var(--red);
-  background: #351e29;
-}
-
-.progress {
-  height: 12px;
-  border-radius: 20px;
-  background: #20364d;
-  overflow: hidden;
-  margin: 16px 0;
-}
-
-.progress-inner {
-  height: 100%;
-  background: linear-gradient(90deg,#f0c96b,#00d5a0);
-  width: 0%;
-  transition: width .4s;
-  border-radius: 20px;
-}
-
-.stock {
-  cursor: pointer;
-  transition: transform .15s;
-}
-
-.stock:hover {
-  transform: translateY(-2px);
-}
-
-.stock-name {
-  font-size: 23px;
-  font-weight: bold;
-}
-
-.stock-company {
-  color: var(--muted);
-  margin-top: 5px;
-}
-
-.stock-price {
-  font-size: 30px;
-  font-weight: bold;
-  margin: 18px 0 5px;
-}
-
-.positive {
-  color: var(--green);
-}
-
-.negative {
-  color: var(--red);
-}
-
-.neutral {
-  color: var(--yellow);
-}
-
-.small-stats {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 9px;
-  margin-top: 18px;
-}
-
-.stat {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 11px;
-  background: #0a1726;
-}
-
-.stat-label {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.stat-value {
-  margin-top: 6px;
-  font-weight: bold;
-}
-
-.chart {
-  width: 100%;
-  height: 60px;
-  margin-top: 10px;
-}
-
-.section-description {
-  color: var(--muted);
-  line-height: 1.7;
-}
-
-.indicator {
-  background: var(--card2);
-  border: 1px solid var(--border);
-  padding: 17px;
-  border-radius: 18px;
-}
-
-.indicator-title {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.indicator-value {
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.signal-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.signal-item {
-  border: 1px solid var(--border);
-  background: var(--card2);
-  border-radius: 17px;
-  padding: 16px;
-}
-
-.signal-item strong {
-  display: block;
-  margin-bottom: 6px;
-}
-
-.footer {
-  text-align: center;
-  color: var(--muted);
-  font-size: 12px;
-  padding: 25px 0;
-}
-
-.hidden {
-  display: none !important;
-}
-
-@media(max-width:650px) {
-  body {
-    padding: 14px;
-  }
-
-  .grid3 {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-  }
-
-  .card {
-    padding: 18px;
-  }
-
-  .metric {
-    padding: 16px;
-  }
-
-  .metric-value {
-    font-size: 25px;
-  }
-
-  .status-pill {
-    font-size: 10px;
-    padding: 7px;
-  }
-
-  .tab {
-    padding: 12px 16px;
-  }
-}
-
-@media(max-width:380px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+.loading{color:var(--muted);padding:20px;text-align:center}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(min-width:650px){
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .stock-grid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
 
 <body>
-<div class="app">
 
-<!-- HEADER -->
-<header class="header">
-  <div class="logo">AI</div>
-  <div>
-    <h1>AI TURNAROUND RADAR</h1>
-    <div class="subtitle">AI & halvledare · Vändningsbevakning</div>
+<header>
+  <div class="brand">
+    <div class="logo">◎</div>
+    <div>
+      <h1>AI TURNAROUND RADAR</h1>
+      <div class="subtitle">AI & halvledare · Vändningsbevakning</div>
+    </div>
   </div>
-  <div class="status-pill" id="appStatus">● LIVE API</div>
+  <div id="connection" class="status"><span class="dot"></span> ANSLUTER TILL DATA</div>
 </header>
 
-<!-- CONNECTION -->
-<div class="card">
-  <div class="card-title">
-    <span>MARKNADSSCANNER</span>
-    <span>SOXX / SMH</span>
-  </div>
-
-  <div class="refresh-row">
-    <button class="refresh-btn" id="refreshBtn" onclick="loadData()">
-      ↻ Uppdatera
-    </button>
-    <div class="connection" id="connectionStatus">
-      Ansluter till marknadsdata...
-    </div>
-  </div>
-
-  <div id="errorMessage" class="error"></div>
-</div>
-
-<!-- NAVIGATION -->
-<nav class="tabs">
-  <button class="tab active" onclick="showPage('overview',this)">Översikt</button>
-  <button class="tab" onclick="showPage('market',this)">Marknad</button>
-  <button class="tab" onclick="showPage('stocks',this)">Aktier</button>
-  <button class="tab" onclick="showPage('signals',this)">Signaler</button>
+<nav>
+  <button class="active" data-page="overview">Översikt</button>
+  <button data-page="market">Marknad</button>
+  <button data-page="stocks">Aktier</button>
+  <button data-page="signals">Signaler</button>
 </nav>
 
-<!-- OVERVIEW -->
-<section class="page active" id="overview">
+<main>
 
-  <h2>Marknadsöversikt</h2>
-
-  <div class="card">
-    <div class="card-title">
-      <span>SEKTOR-SIGNAL</span>
-      <span>SOXX / SMH</span>
-    </div>
-
-    <div class="score-big" id="sectorScore">-- <small style="font-size:25px">/10</small></div>
-
-    <div class="signal yellow" id="sectorSignal">INVÄNTAR DATA</div>
-
-    <div class="progress">
-      <div class="progress-inner" id="sectorProgress"></div>
-    </div>
-
-    <div class="section-description" id="sectorDescription">
-      Väntar på marknadsdata från API.
-    </div>
+<!-- ÖVERSIKT -->
+<section id="overview" class="page active">
+  <div class="toolbar">
+    <div class="small">SEKTOR-SIGNAL</div>
+    <button class="btn" onclick="loadData()">↻ Uppdatera</button>
   </div>
 
   <div class="card">
-    <div class="card-title">
-      <span>RADARSTATUS</span>
-      <span>5 INDIKATORER</span>
-    </div>
-
-    <div class="grid">
-      <div class="indicator">
-        <div class="indicator-title">ETF-flöden / trend</div>
-        <div class="indicator-value neutral" id="etfStatus">Inväntar</div>
-      </div>
-
-      <div class="indicator">
-        <div class="indicator-title">Trend</div>
-        <div class="indicator-value neutral" id="trendStatus">Inväntar</div>
-      </div>
-
-      <div class="indicator">
-        <div class="indicator-title">Marknadsbredd</div>
-        <div class="indicator-value neutral" id="breadthStatus">Inväntar</div>
-      </div>
-
-      <div class="indicator">
-        <div class="indicator-title">Momentum / RSI</div>
-        <div class="indicator-value neutral" id="momentumStatus">Inväntar</div>
-      </div>
-    </div>
+    <div class="card-title"><span>SEKTOR-SIGNAL</span><span>SOXX / SMH</span></div>
+    <div id="sectorScore" class="big-score">-- <small>/ 10</small></div>
+    <div id="sectorPill" class="pill">Inväntar live-data</div>
+    <div class="progress"><span id="sectorBar" style="width:0%"></span></div>
+    <div class="note" id="sectorNote">Poängen beräknas när live-data har hämtats.</div>
   </div>
-
-  <h2>Bevakade aktier</h2>
-  <div class="grid" id="overviewStocks"></div>
-
-</section>
-
-<!-- MARKET -->
-<section class="page" id="market">
-
-  <h2>Marknadsdata</h2>
-  <p class="section-description">
-    ETF:er används för att bedöma den breda halvledarsektorn.
-  </p>
-
-  <div class="grid" id="marketCards"></div>
 
   <div class="card">
-    <h3>Hur marknaden bedöms</h3>
-    <p class="section-description">
-      Radarn analyserar trend, korta och medellånga glidande medelvärden,
-      momentum och prisutveckling. En starkare sektortrend kan öka
-      sannolikheten för att AI- och halvledaraktier återhämtar sig.
-    </p>
+    <div class="card-title"><span>RADARSTATUS</span><span>INDIKATORER</span></div>
+    <div class="grid" id="overviewIndicators">
+      <div class="stat"><label>ETF-flöden</label><strong class="neutral-text">Inväntar data</strong></div>
+      <div class="stat"><label>Trend</label><strong class="neutral-text">Inväntar data</strong></div>
+      <div class="stat"><label>Marknadsbredd</label><strong class="neutral-text">Inväntar data</strong></div>
+      <div class="stat"><label>Momentum / volym</label><strong class="neutral-text">Inväntar data</strong></div>
+    </div>
   </div>
 
+  <div class="section-heading">BEVAKADE AKTIER · tryck för detaljer</div>
+  <div id="overviewStocks" class="stock-grid"></div>
 </section>
 
-<!-- STOCKS -->
-<section class="page" id="stocks">
-
-  <h2>Aktieanalys</h2>
-  <p class="section-description">
-    Tryck på en aktie för att se dess tekniska indikatorer.
-  </p>
-
-  <div class="grid" id="allStocks"></div>
-
-  <div class="card" id="stockDetails">
-    <h3>Aktiedetaljer</h3>
-    <p class="section-description" id="detailText">
-      Välj en aktie ovan för att visa detaljer.
-    </p>
-  </div>
-
-</section>
-
-<!-- SIGNALS -->
-<section class="page" id="signals">
-
-  <h2>Vändningssignaler</h2>
-
+<!-- MARKNAD -->
+<section id="market" class="page">
+  <div class="section-heading">MARKNADSÖVERSIKT</div>
   <div class="card">
-    <h3>Vad letar radarn efter?</h3>
-    <p class="section-description">
-      Radarn försöker identifiera när AI- och halvledaraktier börjar visa
-      tecken på återhämtning efter svaghet.
-    </p>
+    <div class="card-title"><span>SEKTOR-ETF</span><span>LIVE DATA</span></div>
+    <div id="marketETFs" class="stock-grid"></div>
   </div>
-
-  <div class="signal-list" id="signalList">
-
-    <div class="signal-item">
-      <strong>1. Pris över MA20</strong>
-      <div class="section-description">
-        En kortsiktig trendvändning kan börja när priset återtar MA20.
-      </div>
+  <div class="card">
+    <div class="card-title"><span>MARKNADSTREND</span></div>
+    <div id="marketTrend">
+      <div class="loading">Inväntar marknadsdata…</div>
     </div>
-
-    <div class="signal-item">
-      <strong>2. Pris över MA50</strong>
-      <div class="section-description">
-        Indikerar att den medellånga trenden förbättras.
-      </div>
-    </div>
-
-    <div class="signal-item">
-      <strong>3. MA20 över MA50</strong>
-      <div class="section-description">
-        En positiv trendstruktur kan börja utvecklas.
-      </div>
-    </div>
-
-    <div class="signal-item">
-      <strong>4. RSI återhämtar sig</strong>
-      <div class="section-description">
-        Momentum förbättras utan att aktien nödvändigtvis är överköpt.
-      </div>
-    </div>
-
-    <div class="signal-item">
-      <strong>5. Positiv dagsutveckling</strong>
-      <div class="section-description">
-        Positiv prisutveckling ger stöd åt vändningssignalen.
-      </div>
-    </div>
-
   </div>
-
-  <h2>Aktiesignaler just nu</h2>
-  <div class="grid" id="signalStocks"></div>
-
 </section>
 
-<footer class="footer">
-  AI Turnaround Radar · Teknisk analys · Inte investeringsrådgivning
-  <br><span id="lastUpdate">Ingen data hämtad ännu</span>
-</footer>
+<!-- AKTIER -->
+<section id="stocks" class="page">
+  <div class="section-heading">BEVAKADE AKTIER</div>
+  <div class="small">Tryck på ett kort för att se indikatorer.</div>
+  <div id="allStocks" class="stock-grid" style="margin-top:14px"></div>
+</section>
 
-</div>
+<!-- SIGNALER -->
+<section id="signals" class="page">
+  <div class="section-heading">VÄNDNINGSSIGNALER</div>
+  <div class="card">
+    <div id="signalsContent">
+      <div class="loading">Inväntar live-data…</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span>RADARREGLER</span></div>
+    <p class="note">Radarpoängen baseras på trend, momentum och prisförhållande till glidande medelvärden. Den är ett tekniskt bevakningsverktyg, inte en köp- eller säljrekommendation.</p>
+  </div>
+</section>
+
+<div id="errorBox"></div>
+<div class="small" style="text-align:center;margin:15px" id="lastUpdate">Data har inte hämtats ännu.</div>
+
+</main>
+
+<footer>AI Turnaround Radar · Teknisk marknadsbevakning · Ej investeringsråd</footer>
 
 <script>
-/* ========================================
-   API INSTÄLLNING
-======================================== */
+/* ================================
+   CLOUDFLARE WORKER API
+================================ */
+const API_URL = "https://withered-block-6280.henrikt123.workers.dev/api/radar";
 
-const API_URL =
-  "https://withered-block-6280.henrikt123.workers.dev/api/radar";
-
-const SYMBOLS = ["NVDA","AMD","MU","AVGO","SOXX","SMH"];
-
-const COMPANY_NAMES = {
-  NVDA: "NVIDIA",
-  AMD: "Advanced Micro Devices",
-  MU: "Micron Technology",
-  AVGO: "Broadcom",
-  SOXX: "iShares Semiconductor ETF",
-  SMH: "VanEck Semiconductor ETF"
+/* ================================
+   AKTIER SOM BEVAKAS
+================================ */
+const WATCH = {
+  NVDA:"NVIDIA",
+  MU:"Micron Technology",
+  AMD:"Advanced Micro Devices",
+  AVGO:"Broadcom",
+  SOXX:"iShares Semiconductor ETF",
+  SMH:"VanEck Semiconductor ETF"
 };
 
-let marketData = {};
-let loading = false;
+let marketData = [];
+let lastSuccessfulFetch = null;
 
-/* ========================================
-   NAVIGATION
-======================================== */
+const $ = id => document.getElementById(id);
 
-function showPage(page, button) {
-  document.querySelectorAll(".page").forEach(p => {
-    p.classList.remove("active");
+function fmt(value){
+  if(value===null || value===undefined || !Number.isFinite(Number(value))) return "–";
+  return Number(value).toLocaleString("sv-SE",{maximumFractionDigits:2});
+}
+function pct(value){
+  if(value===null || value===undefined || !Number.isFinite(Number(value))) return "–";
+  return (Number(value)>0?"+":"")+Number(value).toFixed(2)+"%";
+}
+function tone(value){
+  if(value>0) return "good-text";
+  if(value<0) return "bad-text";
+  return "neutral-text";
+}
+function signalClass(text){
+  if(/stark|positiv|uppåt|bull/i.test(text)) return "good";
+  if(/svag|nedåt|negativ|avvakta/i.test(text)) return "bad";
+  return "";
+}
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+/* ================================
+   TABS
+================================ */
+document.querySelectorAll("nav button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    button.classList.add("active");
+    $(button.dataset.page).classList.add("active");
   });
+});
 
-  document.getElementById(page).classList.add("active");
-
-  document.querySelectorAll(".tab").forEach(t => {
-    t.classList.remove("active");
-  });
-
-  if (button) button.classList.add("active");
+/* ================================
+   DATA NORMALISERING
+================================ */
+function normalizeData(payload){
+  if(Array.isArray(payload)) return payload;
+  if(Array.isArray(payload?.results)) return payload.results;
+  if(Array.isArray(payload?.data)) return payload.data;
+  if(payload?.result && Array.isArray(payload.result)) return payload.result;
+  return [];
+}
+function findSymbol(symbol){
+  return marketData.find(x=>String(x.symbol||x.ticker||"").toUpperCase()===symbol);
+}
+function scoreOf(item){
+  if(!item) return null;
+  if(Number.isFinite(Number(item.score))) return Number(item.score);
+  const latest=Number(item.latest ?? item.price);
+  const ma20=Number(item.ma20);
+  const ma50=Number(item.ma50);
+  const rsi=Number(item.rsi);
+  const prev=Number(item.prev);
+  if(!Number.isFinite(latest)) return null;
+  return [latest>ma20,latest>ma50,ma20>ma50,
+          Number.isFinite(rsi)&&rsi>50,
+          Number.isFinite(prev)&&latest>prev].filter(Boolean).length;
 }
 
-/* ========================================
-   FETCH DATA
-======================================== */
-
-async function loadData() {
-  if (loading) return;
-
-  loading = true;
-
-  const btn = document.getElementById("refreshBtn");
-  const status = document.getElementById("connectionStatus");
-  const error = document.getElementById("errorMessage");
-
-  btn.disabled = true;
-  btn.textContent = "⟳ Hämtar...";
-  status.textContent = "Kontaktar Cloudflare API...";
-  error.textContent = "";
-
-  try {
-    const response = await fetch(API_URL, {
-      method: "GET",
-      cache: "no-store"
-    });
-
-    if (!response.ok) {
-      throw new Error("Server svarade HTTP " + response.status);
-    }
-
-    const json = await response.json();
-
-    if (!json.success || !json.results) {
-      throw new Error("API returnerade inget marknadsresultat.");
-    }
-
-    marketData = json.results;
-
-    const valid = Object.values(marketData).filter(
-      item => item && typeof item.latest === "number"
-    );
-
-    const failed = Object.values(marketData).filter(
-      item => item && item.error
-    );
-
-    if (valid.length === 0) {
-      const errorText = failed.length
-        ? failed.map(item => item.symbol + ": " + item.error).join(" | ")
-        : "Ingen kursdata tillgänglig";
-
-      throw new Error(errorText);
-    }
-
-    renderAll();
-
-    status.innerHTML =
-      '<span class="success">✓ API anslutet · ' +
-      valid.length + ' av ' + SYMBOLS.length +
-      ' instrument med data</span>';
-
-    if (failed.length) {
-      error.textContent =
-        "Vissa instrument saknar data: " +
-        failed.map(x => x.symbol).join(", ");
-    }
-
-    document.getElementById("appStatus").textContent = "● DATA";
-    document.getElementById("lastUpdate").textContent =
-      "Senast uppdaterad: " +
-      new Date(json.timestamp).toLocaleString("sv-SE");
-
-  } catch (err) {
-    status.textContent = "Kunde inte hämta marknadsdata";
-    error.textContent = err.message;
-
-    document.getElementById("appStatus").textContent = "● API-FEL";
-
-    renderAll();
-
-  } finally {
-    loading = false;
-    btn.disabled = false;
-    btn.textContent = "↻ Uppdatera";
-  }
-}
-
-/* ========================================
-   FORMAT
-======================================== */
-
-function fmtPrice(value) {
-  if (value == null || !Number.isFinite(value)) return "--";
-
-  return value.toLocaleString("sv-SE", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-}
-
-function fmtPct(value) {
-  if (value == null || !Number.isFinite(value)) return "--";
-
-  return (value > 0 ? "+" : "") +
-    value.toFixed(2) + "%";
-}
-
-function colorClass(value) {
-  if (value == null) return "neutral";
-  if (value > 0) return "positive";
-  if (value < 0) return "negative";
-  return "neutral";
-}
-
-function getItem(symbol) {
-  return marketData[symbol] || null;
-}
-
-function validItem(symbol) {
-  const item = getItem(symbol);
-  return item && typeof item.latest === "number";
-}
-
-function averageScore(symbols) {
-  const valid = symbols.filter(validItem);
-
-  if (!valid.length) return null;
-
-  const sum = valid.reduce((total, symbol) => {
-    return total + (getItem(symbol).score || 0);
-  }, 0);
-
-  return sum / valid.length;
-}
-
-/* ========================================
-   SIGNAL TEXT
-======================================== */
-
-function scoreSignal(score) {
-  if (score == null) {
-    return {
-      text: "INVÄNTAR DATA",
-      class: "yellow"
-    };
-  }
-
-  if (score >= 7) {
-    return {
-      text: "STARK VÄNDNING",
-      class: "green"
-    };
-  }
-
-  if (score >= 5) {
-    return {
-      text: "POSITIV",
-      class: "green"
-    };
-  }
-
-  if (score >= 3) {
-    return {
-      text: "AVVAKTA",
-      class: "yellow"
-    };
-  }
-
-  return {
-    text: "SVAG TREND",
-    class: "red"
-  };
-}
-
-/* ========================================
-   OVERVIEW RENDER
-======================================== */
-
-function renderOverview() {
-  const score = averageScore(["SOXX","SMH"]);
-
-  const scoreElement = document.getElementById("sectorScore");
-  const signalElement = document.getElementById("sectorSignal");
-  const progress = document.getElementById("sectorProgress");
-
-  if (score == null) {
-    scoreElement.innerHTML = '-- <small style="font-size:25px">/10</small>';
-    signalElement.textContent = "INVÄNTAR DATA";
-    signalElement.className = "signal yellow";
-    progress.style.width = "0%";
-  } else {
-    const rounded = Math.round(score);
-
-    scoreElement.innerHTML =
-      rounded + ' <small style="font-size:25px">/10</small>';
-
-    const signal = scoreSignal(rounded);
-
-    signalElement.textContent = signal.text;
-    signalElement.className = "signal " + signal.class;
-
-    progress.style.width = (rounded * 10) + "%";
-  }
-
-  const validETF = ["SOXX","SMH"].filter(validItem);
-
-  if (validETF.length) {
-    const positive = validETF.filter(
-      s => getItem(s).changePct > 0
-    ).length;
-
-    document.getElementById("etfStatus").textContent =
-      positive === validETF.length ? "Positiva" :
-      positive === 0 ? "Svaga" : "Blandade";
-  } else {
-    document.getElementById("etfStatus").textContent = "Inväntar data";
-  }
-
-  const avgTrend = averageScore(["NVDA","AMD","MU","AVGO"]);
-
-  document.getElementById("trendStatus").textContent =
-    avgTrend == null ? "Inväntar" :
-    avgTrend >= 6 ? "Uppåt" :
-    avgTrend >= 3 ? "Avvaktar" : "Nedåt";
-
-  const positiveStocks = ["NVDA","AMD","MU","AVGO"]
-    .filter(validItem)
-    .filter(s => getItem(s).changePct > 0).length;
-
-  document.getElementById("breadthStatus").textContent =
-    ["NVDA","AMD","MU","AVGO"].filter(validItem).length === 0
-    ? "Inväntar"
-    : positiveStocks + " / 4 positiva";
-
-  document.getElementById("momentumStatus").textContent =
-    avgTrend == null ? "Inväntar" :
-    avgTrend >= 6 ? "Starkt" :
-    avgTrend >= 3 ? "Neutral" : "Svagt";
-
-  const desc = score == null
-    ? "Marknadsdata saknas. Tryck Uppdatera för att försöka hämta data."
-    : score >= 7
-      ? "Sektorn visar flera positiva tekniska signaler."
-      : score >= 5
-        ? "Flera indikatorer börjar förbättras."
-        : score >= 3
-          ? "Marknaden är blandad. Vändningen är inte bekräftad."
-          : "Svag sektortrend. Vändningssignalerna är begränsade.";
-
-  document.getElementById("sectorDescription").textContent = desc;
-
-  document.getElementById("overviewStocks").innerHTML =
-    ["NVDA","AMD","MU","AVGO"].map(createStockCard).join("");
-}
-
-/* ========================================
-   MARKET RENDER
-======================================== */
-
-function renderMarket() {
-  document.getElementById("marketCards").innerHTML =
-    ["SOXX","SMH"].map(symbol => {
-      const item = getItem(symbol);
-
-      return `
-        <div class="metric">
-          <div class="metric-label">${symbol}</div>
-          <div class="metric-value">
-            ${item && item.latest != null ? fmtPrice(item.latest) : "--"}
-          </div>
-          <div class="${colorClass(item?.changePct)}">
-            ${item ? fmtPct(item.changePct) : "Inväntar data"}
-          </div>
-          ${createChart(item)}
-          <div class="small-stats">
-            <div class="stat">
-              <div class="stat-label">RSI</div>
-              <div class="stat-value">${item?.RSI != null ? item.RSI.toFixed(1) : "--"}</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">Score</div>
-              <div class="stat-value">${item?.score ?? "--"} / 5</div>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join("");
-}
-
-/* ========================================
-   STOCK CARDS
-======================================== */
-
-function createStockCard(symbol) {
-  const item = getItem(symbol);
-  const score = item?.score;
-  const signal = scoreSignal(score);
-
-  return `
-    <div class="metric stock" onclick="showStockDetails('${symbol}')">
-      <div class="stock-name">${symbol}</div>
-      <div class="stock-company">${COMPANY_NAMES[symbol]}</div>
-
-      <div class="stock-price">
-        ${item && item.latest != null ? fmtPrice(item.latest) : "--"}
-      </div>
-
-      <div class="${colorClass(item?.changePct)}">
-        ${item ? fmtPct(item.changePct) : "Inväntar data"}
-      </div>
-
-      ${createChart(item)}
-
-      <div class="signal ${signal.class}">
-        ${signal.text}
-      </div>
-
-      <div class="small-stats">
-        <div class="stat">
-          <div class="stat-label">RSI</div>
-          <div class="stat-value">${item?.RSI != null ? item.RSI.toFixed(1) : "--"}</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Radar Score</div>
-          <div class="stat-value">${score ?? "--"} / 5</div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function renderStocks() {
-  document.getElementById("allStocks").innerHTML =
-    ["NVDA","AMD","MU","AVGO"].map(createStockCard).join("");
-}
-
-/* ========================================
-   STOCK DETAILS
-======================================== */
-
-function showStockDetails(symbol) {
-  const item = getItem(symbol);
-  const details = document.getElementById("detailText");
-
-  if (!item || item.latest == null) {
-    details.textContent =
-      symbol + ": Ingen data tillgänglig just nu.";
-    return;
-  }
-
-  const signal = scoreSignal(item.score);
-
-  details.innerHTML = `
-    <strong>${symbol} – ${COMPANY_NAMES[symbol]}</strong><br><br>
-
-    Kurs: ${fmtPrice(item.latest)}<br>
-    Dagsförändring: ${fmtPct(item.changePct)}<br>
-    RSI: ${item.RSI != null ? item.RSI.toFixed(2) : "--"}<br>
-    MA20: ${fmtPrice(item.MA20)}<br>
-    MA50: ${fmtPrice(item.MA50)}<br>
-    Radar Score: ${item.score ?? "--"} / 5<br>
-    Signal: ${signal.text}<br><br>
-
-    <strong>Teknisk bedömning</strong><br>
-    ${item.latest > item.MA20
-      ? "Kursen ligger över MA20."
-      : "Kursen ligger under MA20."}<br>
-
-    ${item.latest > item.MA50
-      ? "Kursen ligger över MA50."
-      : "Kursen ligger under MA50."}<br>
-
-    ${item.MA20 && item.MA50 && item.MA20 > item.MA50
-      ? "MA20 ligger över MA50 – positiv trendstruktur."
-      : "MA20 ligger inte över MA50 – trendvändning ej bekräftad."}
-  `;
-}
-
-/* ========================================
-   MINI CHART
-======================================== */
-
-function createChart(item) {
-  if (!item || !item.bars || item.bars.length < 2) {
-    return "";
-  }
-
-  const values = item.bars
-    .map(b => b.close)
-    .filter(v => Number.isFinite(v));
-
-  if (values.length < 2) return "";
-
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1;
-
-  const points = values.map((value,index) => {
-    const x = index / (values.length - 1) * 300;
-    const y = 48 - ((value - min) / range * 42);
-
+/* ================================
+   SPARKLINE
+================================ */
+function spark(item){
+  const bars=item?.bars;
+  if(!Array.isArray(bars)||bars.length<2) return "";
+  const vals=bars.map(b=>Number(b.close)).filter(Number.isFinite);
+  if(vals.length<2) return "";
+  const min=Math.min(...vals),max=Math.max(...vals);
+  const range=max-min||1;
+  const points=vals.map((v,i)=>{
+    const x=i/(vals.length-1)*100;
+    const y=40-((v-min)/range)*35;
     return `${x},${y}`;
   }).join(" ");
+  const color=vals.at(-1)>=vals[0]?"#44d39a":"#f07883";
+  return `<svg viewBox="0 0 100 45" preserveAspectRatio="none">
+    <polyline fill="none" stroke="${color}" stroke-width="2.5" points="${points}"/>
+  </svg>`;
+}
 
-  const rising = values[values.length - 1] >= values[0];
-  const stroke = rising ? "#00d5a0" : "#f07885";
+/* ================================
+   STOCK CARD
+================================ */
+function stockCard(symbol){
+  const item=findSymbol(symbol);
+  const price=item?.latest ?? item?.price ?? item?.close;
+  const change=item?.changePct;
+  const score=scoreOf(item);
+  const label=WATCH[symbol];
+  const trend=change>0?"Positiv":change<0?"Negativ":"Neutral";
 
   return `
-    <svg class="chart" viewBox="0 0 300 55" preserveAspectRatio="none">
-      <polyline
-        points="${points}"
-        fill="none"
-        stroke="${stroke}"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
+  <article class="stock" onclick="this.classList.toggle('open')">
+    <h3>${symbol}</h3>
+    <div class="name">${label}</div>
+    <div class="price">${item?fmt(price):"–"}</div>
+    <div class="change ${tone(change)}">${item?pct(change):"Ingen data"}</div>
+    <div class="spark">${spark(item)}</div>
+    <div class="stock-foot">${score===null?"Score saknas":`Signal ${score}/${item.scoreMax||5}`}</div>
+    <div class="detail">
+      <b>Senaste pris:</b> ${fmt(price)}<br>
+      <b>Daglig förändring:</b> ${pct(change)}<br>
+      <b>MA20:</b> ${fmt(item?.ma20)}<br>
+      <b>MA50:</b> ${fmt(item?.ma50)}<br>
+      <b>RSI:</b> ${fmt(item?.rsi)}<br>
+      <b>Trend:</b> ${trend}<br>
+      <b>Datum:</b> ${escapeHTML(item?.date||"–")}<br>
+      <b>Radarpoäng:</b> ${score===null?"–":score+"/"+(item.scoreMax||5)}
+    </div>
+  </article>`;
+}
+
+/* ================================
+   SECTOR SCORE
+================================ */
+function calculateSectorScore(){
+  const etfs=["SOXX","SMH"];
+  const available=etfs.map(findSymbol).filter(Boolean);
+  if(!available.length) return null;
+
+  const values=available.map(item=>{
+    let s=scoreOf(item);
+    const max=Number(item.scoreMax)||5;
+    if(s===null) return null;
+    return s/max*10;
+  }).filter(v=>v!==null);
+
+  if(!values.length) return null;
+  return Math.round(values.reduce((a,b)=>a+b,0)/values.length);
+}
+function sectorText(score){
+  if(score>=8) return "STARK VÄNDNING";
+  if(score>=6) return "POSITIV";
+  if(score>=4) return "AVVAKTA";
+  return "SVAG TREND";
+}
+function renderOverview(){
+  const score=calculateSectorScore();
+  if(score===null){
+    $("sectorScore").innerHTML='-- <small>/ 10</small>';
+    $("sectorPill").textContent="Data saknas";
+    $("sectorNote").textContent="Worker har ännu inte levererat sektordata.";
+    $("sectorBar").style.width="0%";
+  }else{
+    $("sectorScore").innerHTML=`${score} <small>/ 10</small>`;
+    $("sectorPill").textContent=sectorText(score);
+    $("sectorPill").className="pill "+signalClass(sectorText(score));
+    $("sectorNote").textContent="Poäng baserad på tillgänglig ETF-data. Inte investeringsråd.";
+    $("sectorBar").style.width=(score*10)+"%";
+  }
+
+  const soxx=findSymbol("SOXX"), smh=findSymbol("SMH");
+  const etfChanges=[soxx?.changePct,smh?.changePct].filter(v=>Number.isFinite(Number(v)));
+  const averageChange=etfChanges.length?etfChanges.reduce((a,b)=>a+Number(b),0)/etfChanges.length:null;
+  const trend=averageChange===null?"Inväntar data":averageChange>0?"Uppåt":averageChange<0?"Nedåt":"Neutral";
+  const trendClass=averageChange===null?"neutral-text":tone(averageChange);
+
+  $("overviewIndicators").innerHTML=`
+    <div class="stat"><label>ETF-flöden</label><strong class="neutral-text">Flödesdata saknas</strong></div>
+    <div class="stat"><label>Trend</label><strong class="${trendClass}">${trend}</strong></div>
+    <div class="stat"><label>Marknadsbredd</label><strong class="neutral-text">Data saknas</strong></div>
+    <div class="stat"><label>Momentum / volym</label><strong class="neutral-text">RSI / pris</strong></div>
   `;
+  $("overviewStocks").innerHTML=["NVDA","MU","AMD","AVGO"].map(stockCard).join("");
 }
 
-/* ========================================
-   RENDER ALL
-======================================== */
-
-function renderAll() {
-  renderOverview();
-  renderMarket();
-  renderStocks();
-
-  document.getElementById("signalStocks").innerHTML =
-    ["NVDA","AMD","MU","AVGO"].map(symbol => {
-      const item = getItem(symbol);
-      const signal = scoreSignal(item?.score);
-
-      return `
-        <div class="metric">
-          <div class="stock-name">${symbol}</div>
-          <div class="stock-company">${COMPANY_NAMES[symbol]}</div>
-          <div class="signal ${signal.class}">${signal.text}</div>
-          <div class="metric-sub">
-            Score: ${item?.score ?? "--"} / 5
-          </div>
-        </div>
-      `;
-    }).join("");
+/* ================================
+   MARKET TAB
+================================ */
+function renderMarket(){
+  $("marketETFs").innerHTML=["SOXX","SMH"].map(stockCard).join("");
+  const soxx=findSymbol("SOXX"),smh=findSymbol("SMH");
+  const list=[["SOXX",soxx],["SMH",smh]];
+  $("marketTrend").innerHTML=list.map(([s,x])=>`
+    <div class="signal-row">
+      <span>${s} · ${WATCH[s]}</span>
+      <strong class="${tone(x?.changePct)}">${x?pct(x.changePct):"Data saknas"}</strong>
+    </div>`).join("");
 }
 
-/* ========================================
-   START
-======================================== */
+/* ================================
+   STOCKS TAB
+================================ */
+function renderStocks(){
+  $("allStocks").innerHTML=Object.keys(WATCH).map(stockCard).join("");
+}
 
-// Ingen automatisk polling.
-// Uppdatera manuellt för att spara API-anrop.
+/* ================================
+   SIGNALS
+================================ */
+function renderSignals(){
+  const signals=Object.keys(WATCH).map(symbol=>{
+    const item=findSymbol(symbol);
+    const score=scoreOf(item);
+    let text="Data saknas";
+    let cls="neutral-text";
+    if(score!==null){
+      const max=Number(item.scoreMax)||5;
+      if(score/max>=.8){text="Stark";cls="good-text";}
+      else if(score/max>=.6){text="Positiv";cls="good-text";}
+      else if(score/max>=.4){text="Avvaktar";cls="neutral-text";}
+      else{text="Svag";cls="bad-text";}
+    }
+    return `<div class="signal-row">
+      <span>${symbol} · ${WATCH[symbol]}</span>
+      <strong class="${cls}">${text} ${score===null?"":`(${score}/${item.scoreMax||5})`}</strong>
+    </div>`;
+  }).join("");
+  $("signalsContent").innerHTML=signals;
+}
 
-renderAll();
+/* ================================
+   STATUS
+================================ */
+function setConnection(live,message){
+  $("connection").innerHTML=`<span class="dot ${live?"live":""}"></span> ${escapeHTML(message)}`;
+}
+
+/* ================================
+   LOAD LIVE DATA
+================================ */
+async function loadData(){
+  $("errorBox").innerHTML="";
+  setConnection(false,"HÄMTAR LIVE-DATA…");
+
+  try{
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),20000);
+
+    const response=await fetch(API_URL,{
+      method:"GET",
+      cache:"no-store",
+      signal:controller.signal,
+      headers:{"Accept":"application/json"}
+    });
+    clearTimeout(timeout);
+
+    if(!response.ok) throw new Error(`API svarade med HTTP ${response.status}`);
+
+    const payload=await response.json();
+
+    if(payload.error) throw new Error(payload.error);
+
+    const received=normalizeData(payload);
+    if(!received.length) throw new Error("API-svaret innehåller ingen aktiedata.");
+
+    marketData=received;
+    lastSuccessfulFetch=new Date();
+
+    renderOverview();
+    renderMarket();
+    renderStocks();
+    renderSignals();
+
+    setConnection(true,"LIVE DATA · CLOUDFLARE");
+    $("lastUpdate").textContent="Senast uppdaterad: "+lastSuccessfulFetch.toLocaleString("sv-SE");
+
+  }catch(error){
+    console.error("Radar API-fel:",error);
+    setConnection(false,"LIVE-DATA FEL");
+
+    $("errorBox").innerHTML=`
+      <div class="error">
+        <b>Live-data kunde inte hämtas.</b><br>
+        ${escapeHTML(error.message||"Okänt fel")}<br>
+        Kontrollera Cloudflare Worker och API-kopplingen.
+      </div>`;
+
+    if(!marketData.length){
+      $("overviewStocks").innerHTML="";
+      $("allStocks").innerHTML="";
+      $("marketETFs").innerHTML="";
+      $("signalsContent").innerHTML='<div class="loading">Ingen live-data tillgänglig.</div>';
+      $("sectorScore").innerHTML='-- <small>/ 10</small>';
+      $("sectorPill").textContent="Data saknas";
+      $("sectorNote").textContent="Radarpoäng visas inte utan riktig data.";
+      $("sectorBar").style.width="0%";
+    }
+  }
+}
+
+/* Starta appen */
+loadData();
+
+/* Automatisk uppdatering var 15:e minut */
+setInterval(loadData,15*60*1000);
 </script>
 </body>
 </html>
