@@ -1,3 +1,4 @@
+
 name: Build AI Radar APK
 
 on:
@@ -34,23 +35,19 @@ jobs:
           npm install --save-dev @capacitor/cli
 
           mkdir www
-          echo '<html><body></body></html>' > www/index.html
+          cp ../index.html www/index.html
 
           cat > capacitor.config.json <<'EOF'
           {
             "appId": "com.airadar.trading",
             "appName": "AI Radar",
-            "webDir": "www",
-            "server": {
-              "url": "https://regal-nasturtium-72dbc0.netlify.app",
-              "cleartext": false
-            }
+            "webDir": "www"
           }
           EOF
 
           npx cap add android
           npx cap sync android
-        
+
       - name: Build APK
         run: |
           cd apk-project/android
@@ -64,7 +61,7 @@ jobs:
             }
           }" > kotlin-fix.gradle
           ./gradlew -I kotlin-fix.gradle assembleDebug
-          
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
