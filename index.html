@@ -288,9 +288,22 @@ document.querySelectorAll("nav button").forEach(button=>{
 ================================ */
 function normalizeData(payload){
   if(Array.isArray(payload)) return payload;
+
   if(Array.isArray(payload?.results)) return payload.results;
+
+  if(payload?.results && typeof payload.results === "object"){
+    return Object.entries(payload.results).map(([symbol,item])=>({
+      symbol,
+      ...item
+    }));
+  }
+
   if(Array.isArray(payload?.data)) return payload.data;
-  if(payload?.result && Array.isArray(payload.result)) return payload.result;
+
+  if(payload?.result && Array.isArray(payload.result)){
+    return payload.result;
+  }
+
   return [];
 }
 function findSymbol(symbol){
