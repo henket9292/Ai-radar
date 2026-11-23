@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -108,10 +109,21 @@ header {
 .details { border-top:1px solid var(--border);margin-top:13px;padding-top:10px; }
 .detail { font-size:12px;line-height:1.6;margin:5px 0;color:var(--muted); }
 .detail b { color:var(--text); }
+
 .refresh {
   background:var(--panel2);color:var(--text);border:1px solid var(--border);
-  border-radius:11px;padding:9px 12px;font-size:12px;font-weight:700;
+  border-radius:11px;padding:11px 14px;font-size:13px;font-weight:700;
+  cursor:pointer;transition:opacity .2s,transform .15s;
+  -webkit-tap-highlight-color:transparent;
 }
+.refresh:active { transform:scale(.97); }
+.refresh:disabled {
+  cursor:wait;
+  opacity:.65;
+}
+.refresh.success { border-color:var(--green); }
+.refresh.failure { border-color:var(--red); }
+
 .signal { display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border); }
 .signal:last-child { border-bottom:0; }
 .signalicon {
@@ -132,6 +144,7 @@ header {
   font-size:12px;line-height:1.5;margin:12px 0;
 }
 .footer { text-align:center;color:var(--muted);font-size:11px;padding:28px 0; }
+
 @media(min-width:720px) {
   .grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
   .tabs { position:relative; }
@@ -171,14 +184,22 @@ header {
   <div class="section-heading">
     <h2>MARKNADSÖVERSIKT</h2>
     <p>Samlad teknisk bild av AI och halvledarsektorn.</p>
-    <button class="refresh" onclick="loadData()">↻ Uppdatera data</button>
+
+    <button id="refreshBtn" class="refresh" type="button">
+      ↻ Uppdatera data
+    </button>
+
+    <div id="refreshMessage" class="small" style="margin-top:8px"></div>
   </div>
 
   <div class="grid">
     <div class="card full">
       <div class="scorebox">
         <div id="overallCircle" class="scorecircle">
-          <div><strong id="overallScore">--</strong><small>/100</small></div>
+          <div>
+            <strong id="overallScore">--</strong>
+            <small>/100</small>
+          </div>
         </div>
         <div>
           <div id="overallTitle" class="scoretitle">Inväntar data</div>
@@ -192,21 +213,25 @@ header {
       <div id="positive" class="big green">--</div>
       <div class="small">Score 60 eller högre</div>
     </div>
+
     <div class="card">
       <div class="card-label">Svaga aktier</div>
       <div id="negative" class="big red">--</div>
       <div class="small">Score under 45</div>
     </div>
+
     <div class="card">
       <div class="card-label">Marknadsläge</div>
       <div id="marketState" class="big" style="font-size:19px">--</div>
       <div id="marketStateDesc" class="small">Inväntar data</div>
     </div>
+
     <div class="card">
       <div class="card-label">Senaste uppdatering</div>
       <div id="updated" class="big" style="font-size:20px">--</div>
       <div class="small">Automatisk var 15:e minut</div>
     </div>
+
     <div class="card full">
       <div class="card-label">Snabböversikt</div>
       <div id="quickView"></div>
@@ -220,7 +245,9 @@ header {
     <h2>SEKTORMARKNAD</h2>
     <p>SOXX och SMH – styrkan i halvledarsektorn</p>
   </div>
+
   <div id="marketCards"></div>
+
   <div class="notice">
     SOXX och SMH används för att bedöma om sektorn som helhet visar styrka,
     återhämtning eller fortsatt svaghet.
@@ -242,11 +269,14 @@ header {
     <h2>VÄNDNINGSSIGNALER</h2>
     <p>Tekniska förändringar och tecken på förbättring</p>
   </div>
+
   <div class="card full">
     <div id="signalList"></div>
   </div>
+
   <div class="card full" style="margin-top:12px">
     <h3 style="margin-top:0">Så räknas radarn</h3>
+
     <div class="signal">
       <div class="signalicon">📈</div>
       <div class="signalcontent">
@@ -254,6 +284,7 @@ header {
         <div class="signaldesc">Pris i relation till MA20 och MA50 samt hur medelvärdena förhåller sig till varandra.</div>
       </div>
     </div>
+
     <div class="signal">
       <div class="signalicon">💪</div>
       <div class="signalcontent">
@@ -261,6 +292,7 @@ header {
         <div class="signaldesc">Momentum och styrka. Översålda nivåer är inte automatiskt en köpsignal.</div>
       </div>
     </div>
+
     <div class="signal">
       <div class="signalicon">🔄</div>
       <div class="signalcontent">
@@ -268,6 +300,7 @@ header {
         <div class="signaldesc">Förändring från ungefär 20 handelsdagar tidigare.</div>
       </div>
     </div>
+
     <div class="signal">
       <div class="signalicon">🔊</div>
       <div class="signalcontent">
@@ -276,6 +309,7 @@ header {
       </div>
     </div>
   </div>
+
   <div class="notice">
     Detta är ett tekniskt bevakningsverktyg, inte en garanti eller automatisk köp- eller säljsignal.
   </div>
@@ -285,10 +319,14 @@ header {
   AI Turnaround Radar<br>
   Data via Finnhub och Cloudflare Worker
 </div>
+
 </div>
 
 <script>
-/* Worker som vi uppdaterade */
+/* =====================================================
+   INSTÄLLNINGAR
+===================================================== */
+
 const API_URL = "https://withered-block-6280.henrikt123.workers.dev/api/radar";
 
 const SYMBOLS = ["NVDA","MU","AMD","AVGO","SOXX","SMH"];
@@ -305,50 +343,75 @@ const NAMES = {
 
 let data = {};
 let busy = false;
+let lastSuccessfulUpdate = null;
 
-/* Navigation */
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
 document.querySelectorAll(".tab").forEach(button=>{
   button.addEventListener("click",()=>{
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
     document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+
     button.classList.add("active");
-    document.getElementById(button.dataset.tab).classList.add("active");
+
+    const section=document.getElementById(button.dataset.tab);
+    if(section) section.classList.add("active");
   });
 });
 
-/* Helpers */
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
 function number(v){
   if(v===null || v===undefined || v==="" || v==="Saknas") return null;
+
   const n=Number(v);
   return Number.isFinite(n)?n:null;
 }
+
 function safe(v,digits=2){
   const n=number(v);
   return n===null?"Saknas":n.toFixed(digits);
 }
+
 function price(v){
   const n=number(v);
-  return n===null?"Saknas":n.toLocaleString("sv-SE",{minimumFractionDigits:2,maximumFractionDigits:2});
+  return n===null
+    ?"Saknas"
+    :n.toLocaleString("sv-SE",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+      });
 }
+
 function pct(v){
   const n=number(v);
   if(n===null)return "Saknas";
   return (n>0?"+":"")+n.toFixed(2)+"%";
 }
+
 function signClass(v){
   const n=number(v);
   return n===null?"":n>0?"green":n<0?"red":"";
 }
+
 function scoreClass(s){
   if(s===null)return "warn";
   return s>=60?"good":s<45?"bad":"warn";
 }
+
 function scoreColor(s){
   if(s===null)return "var(--border)";
   if(s>=70)return "var(--green)";
   if(s>=50)return "var(--yellow)";
   return "var(--red)";
 }
+
 function scoreLabel(s){
   if(s===null)return "Score saknas";
   if(s>=80)return "Stark teknisk bild";
@@ -357,6 +420,7 @@ function scoreLabel(s){
   if(s>=45)return "Neutral / bevaka";
   return "Svag";
 }
+
 function scoreDescription(s){
   if(s===null)return "Otillräcklig data för att beräkna marknadspoäng.";
   if(s>=80)return "Flera indikatorer visar styrka.";
@@ -366,9 +430,11 @@ function scoreDescription(s){
   return "Den tekniska bilden är svag.";
 }
 
-/* Läs exakt format från Worker:
-   { success:true, results:{NVDA:{...},MU:{...}} }
-*/
+
+/* =====================================================
+   NORMALISERING AV WORKER-DATA
+===================================================== */
+
 function normalize(payload){
   const source=payload?.results || {};
   const normalized={};
@@ -402,65 +468,163 @@ function normalize(payload){
   return normalized;
 }
 
-/* Fetch Worker */
+
+/* =====================================================
+   MANUELL + AUTOMATISK DATAUPPDATERING
+===================================================== */
+
 async function loadData(){
+
   if(busy)return;
+
   busy=true;
 
   const status=document.getElementById("status");
   const errorBox=document.getElementById("errorBox");
+  const refreshBtn=document.getElementById("refreshBtn");
+  const refreshMessage=document.getElementById("refreshMessage");
+
   errorBox.style.display="none";
+
   status.className="status";
   status.textContent="● Uppdaterar";
 
+  if(refreshBtn){
+    refreshBtn.disabled=true;
+    refreshBtn.classList.remove("success","failure");
+    refreshBtn.textContent="⏳ Hämtar data...";
+  }
+
+  if(refreshMessage){
+    refreshMessage.textContent="Kontaktar datakällan...";
+    refreshMessage.className="small";
+  }
+
   try{
-    const response=await fetch(API_URL+"?t="+Date.now(),{cache:"no-store"});
-    if(!response.ok)throw new Error("HTTP "+response.status);
+
+    /* Tvinga ny begäran, undvik cache */
+    const response=await fetch(API_URL+"?t="+Date.now(),{
+      method:"GET",
+      cache:"no-store",
+      headers:{
+        "Cache-Control":"no-cache",
+        "Pragma":"no-cache"
+      }
+    });
+
+    if(!response.ok){
+      throw new Error("HTTP "+response.status);
+    }
 
     const payload=await response.json();
-    if(payload.success===false)throw new Error(payload.error || "Worker rapporterade fel");
+
+    if(payload.success===false){
+      throw new Error(payload.error || "Worker rapporterade fel");
+    }
 
     const normalized=normalize(payload);
+
     if(!Object.keys(normalized).length){
       throw new Error("Worker-svaret saknar aktiedata i results.");
     }
 
+    /* Spara nya data */
     data=normalized;
+
+    /* Rita om hela appen */
     renderAll();
+
+    /* Uppdatering lyckades */
+    lastSuccessfulUpdate=new Date();
+
+    const updateTime=lastSuccessfulUpdate.toLocaleTimeString("sv-SE",{
+      hour:"2-digit",
+      minute:"2-digit"
+    });
+
+    document.getElementById("updated").textContent=updateTime;
 
     status.className="status live";
     status.textContent="● LIVE DATA";
 
-    document.getElementById("updated").textContent=
-      new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
+    if(refreshBtn){
+      refreshBtn.classList.add("success");
+      refreshBtn.textContent="✓ Uppdaterat!";
+    }
+
+    if(refreshMessage){
+      refreshMessage.textContent="Data uppdaterad "+updateTime;
+      refreshMessage.className="small green";
+    }
 
   }catch(e){
-    console.error(e);
+
+    console.error("Radar uppdateringsfel:",e);
+
     status.className="status error";
     status.textContent="● DATAFEL";
 
     errorBox.style.display="block";
-    errorBox.textContent="Kunde inte läsa Worker-data: "+e.message+
+    errorBox.textContent=
+      "Kunde inte läsa Worker-data: "+e.message+
       ". Kontrollera Worker och API-anslutningen.";
 
+    if(refreshBtn){
+      refreshBtn.classList.add("failure");
+      refreshBtn.textContent="⚠ Uppdatering misslyckades";
+    }
+
+    if(refreshMessage){
+      refreshMessage.textContent="Uppdateringen misslyckades. Försök igen.";
+      refreshMessage.className="small red";
+    }
+
+    /* Behåll eventuell tidigare data */
     renderAll();
+
   }finally{
+
     busy=false;
+
+    /* Återställ knappen efter en kort stund */
+    setTimeout(()=>{
+      if(refreshBtn){
+        refreshBtn.disabled=false;
+        refreshBtn.classList.remove("success","failure");
+        refreshBtn.textContent="↻ Uppdatera data";
+      }
+    },1800);
   }
 }
 
-/* Aktie-kort */
+
+/* =====================================================
+   KOPPLA UPPDATERINGSKNAPP
+===================================================== */
+
+document.getElementById("refreshBtn").addEventListener("click",function(){
+  loadData();
+});
+
+
+/* =====================================================
+   AKTIEKORT
+===================================================== */
+
 function stockCard(x){
+
   const s=x.score;
   const barWidth=s===null?0:Math.max(0,Math.min(100,s));
 
   return `
   <article class="stock">
+
     <div class="stocktop">
       <div>
         <div class="ticker">${x.symbol}</div>
         <div class="company">${x.name}</div>
       </div>
+
       <div>
         <div class="price">${x.price===null?"Saknas":price(x.price)}</div>
         <div class="change ${signClass(x.changePercent)}">${pct(x.changePercent)}</div>
@@ -472,168 +636,388 @@ function stockCard(x){
     </div>
 
     <div class="stats">
+
       <div class="stat">
         <div class="statlabel">RSI 14</div>
         <div class="statvalue">${safe(x.rsi)}</div>
       </div>
+
       <div class="stat">
         <div class="statlabel">MA20</div>
         <div class="statvalue">${price(x.ma20)}</div>
       </div>
+
       <div class="stat">
         <div class="statlabel">MA50</div>
         <div class="statvalue">${price(x.ma50)}</div>
       </div>
+
     </div>
 
     <div style="margin-top:13px">
+
       <div class="card-label">Momentum Score</div>
+
       <div style="font-weight:800;margin-top:4px;color:${scoreColor(s)}">
         ${s===null?"Saknas":s+"/100"}
       </div>
+
       <div class="barbg">
         <div class="bar" style="width:${barWidth}%;background:${scoreColor(s)}"></div>
       </div>
+
     </div>
 
-    <div class="small" style="margin-top:8px">${s===null?"Score kan inte beräknas":scoreLabel(s)}</div>
+    <div class="small" style="margin-top:8px">
+      ${s===null?"Score kan inte beräknas":scoreLabel(s)}
+    </div>
+
     <div class="badge ${scoreClass(s)}">${x.reversal}</div>
 
     <div class="details">
+
       <div class="detail"><b>Senaste pris:</b> ${price(x.price)}</div>
-      <div class="detail"><b>Dagsförändring:</b> <span class="${signClass(x.changePercent)}">${pct(x.changePercent)}</span></div>
+
+      <div class="detail">
+        <b>Dagsförändring:</b>
+        <span class="${signClass(x.changePercent)}">${pct(x.changePercent)}</span>
+      </div>
+
       <div class="detail"><b>Momentum Score:</b> ${s===null?"Saknas":s+"/100"}</div>
+
       <div class="detail"><b>RSI 14:</b> ${safe(x.rsi)}</div>
+
       <div class="detail"><b>MA20:</b> ${price(x.ma20)}</div>
+
       <div class="detail"><b>MA50:</b> ${price(x.ma50)}</div>
+
       <div class="detail"><b>20-dagars momentum:</b> ${pct(x.momentum20)}</div>
-      <div class="detail"><b>Volym:</b> ${x.volumeRatio===null?"Saknas":x.volumeRatio.toFixed(2)+"x normal"}</div>
+
+      <div class="detail">
+        <b>Volym:</b>
+        ${x.volumeRatio===null?"Saknas":x.volumeRatio.toFixed(2)+"x normal"}
+      </div>
+
       <div class="detail"><b>Trend:</b> ${x.trend}</div>
-      <div class="detail"><b>Historiska dagar:</b> ${x.historicalDays===null?"Saknas":x.historicalDays}</div>
+
+      <div class="detail">
+        <b>Historiska dagar:</b>
+        ${x.historicalDays===null?"Saknas":x.historicalDays}
+      </div>
+
       <div class="detail"><b>Vändningsbedömning:</b> ${x.reversal}</div>
+
       <div class="detail"><b>Datakälla:</b> Finnhub Live + Historik</div>
+
     </div>
+
   </article>`;
 }
 
-/* Översikt */
+
+/* =====================================================
+   ÖVERSIKT
+===================================================== */
+
 function renderOverview(){
+
   const items=Object.values(data);
   const valid=items.filter(x=>x.score!==null);
-  const avg=valid.length?Math.round(valid.reduce((sum,x)=>sum+x.score,0)/valid.length):null;
+
+  const avg=valid.length
+    ?Math.round(valid.reduce((sum,x)=>sum+x.score,0)/valid.length)
+    :null;
 
   document.getElementById("overallScore").textContent=avg===null?"--":avg;
   document.getElementById("overallCircle").style.borderColor=scoreColor(avg);
   document.getElementById("overallTitle").textContent=scoreLabel(avg);
   document.getElementById("overallDesc").textContent=scoreDescription(avg);
 
-  document.getElementById("positive").textContent=valid.filter(x=>x.score>=60).length;
-  document.getElementById("negative").textContent=valid.filter(x=>x.score<45).length;
+  document.getElementById("positive").textContent=
+    valid.filter(x=>x.score>=60).length;
 
-  let state="Inväntar data",desc="Ingen sektoranalys ännu.";
+  document.getElementById("negative").textContent=
+    valid.filter(x=>x.score<45).length;
+
+  let state="Inväntar data";
+  let desc="Ingen sektoranalys ännu.";
+
   if(avg!==null){
-    if(avg>=70){state="Positiv";desc="Bred teknisk styrka";}
-    else if(avg>=55){state="Återhämtning";desc="Tecken på förbättring";}
-    else if(avg>=45){state="Neutral";desc="Ingen tydlig riktning";}
-    else{state="Svag";desc="Sektorn är under press";}
+
+    if(avg>=70){
+      state="Positiv";
+      desc="Bred teknisk styrka";
+    }
+    else if(avg>=55){
+      state="Återhämtning";
+      desc="Tecken på förbättring";
+    }
+    else if(avg>=45){
+      state="Neutral";
+      desc="Ingen tydlig riktning";
+    }
+    else{
+      state="Svag";
+      desc="Sektorn är under press";
+    }
   }
+
   document.getElementById("marketState").textContent=state;
   document.getElementById("marketStateDesc").textContent=desc;
 
   document.getElementById("quickView").innerHTML=SYMBOLS
     .filter(symbol=>data[symbol])
     .map(symbol=>{
+
       const x=data[symbol];
+
       return `
       <div class="signal">
-        <div class="signalicon">${x.score===null?"⚪":x.score>=60?"🟢":x.score<45?"🔴":"🟡"}</div>
+
+        <div class="signalicon">
+          ${x.score===null?"⚪":x.score>=60?"🟢":x.score<45?"🔴":"🟡"}
+        </div>
+
         <div class="signalcontent">
           <div class="signaltitle">${symbol}</div>
           <div class="signaldesc">${x.trend}</div>
         </div>
-        <div class="signalval ${x.score===null?"muted":x.score>=60?"green":x.score<45?"red":"yellow"}">
+
+        <div class="signalval ${
+          x.score===null?"muted":x.score>=60?"green":x.score<45?"red":"yellow"
+        }">
           ${x.score===null?"--":x.score+"/100"}
         </div>
+
       </div>`;
     }).join("") || `<div class="small">Ingen data tillgänglig.</div>`;
 }
 
-/* Aktier och marknad */
+
+/* =====================================================
+   AKTIER
+===================================================== */
+
 function renderStocks(){
+
   document.getElementById("stockCards").innerHTML=
     STOCKS.map(s=>data[s]?stockCard(data[s]):`
-      <article class="stock"><div class="ticker">${s}</div><div class="company">${NAMES[s]}</div>
-      <div class="badge warn">Data saknas</div></article>
+
+      <article class="stock">
+        <div class="ticker">${s}</div>
+        <div class="company">${NAMES[s]}</div>
+        <div class="badge warn">Data saknas</div>
+      </article>
+
     `).join("");
 }
+
+
+/* =====================================================
+   MARKNAD
+===================================================== */
 
 function renderMarket(){
+
   document.getElementById("marketCards").innerHTML=
     ["SOXX","SMH"].map(s=>data[s]?stockCard(data[s]):`
-      <article class="stock"><div class="ticker">${s}</div><div class="company">${NAMES[s]}</div>
-      <div class="badge warn">Data saknas</div></article>
+
+      <article class="stock">
+        <div class="ticker">${s}</div>
+        <div class="company">${NAMES[s]}</div>
+        <div class="badge warn">Data saknas</div>
+      </article>
+
     `).join("");
 }
 
-/* Signalpanel */
+
+/* =====================================================
+   SIGNALER
+===================================================== */
+
 function renderSignals(){
+
   const signals=[];
-  const sector=["SOXX","SMH"].map(s=>data[s]).filter(x=>x && x.score!==null);
-  const stocks=STOCKS.map(s=>data[s]).filter(x=>x && x.score!==null);
+
+  const sector=["SOXX","SMH"]
+    .map(s=>data[s])
+    .filter(x=>x && x.score!==null);
+
+  const stocks=STOCKS
+    .map(s=>data[s])
+    .filter(x=>x && x.score!==null);
+
+
+  /* Sektorsignal */
 
   if(sector.length){
+
     const avg=sector.reduce((sum,x)=>sum+x.score,0)/sector.length;
+
     if(avg>=70){
-      signals.push(["🚀","Sektorn visar styrka","SOXX/SMH har en stark teknisk sammanvägd poäng.","POSITIV","good"]);
+
+      signals.push([
+        "🚀",
+        "Sektorn visar styrka",
+        "SOXX/SMH har en stark teknisk sammanvägd poäng.",
+        "POSITIV",
+        "good"
+      ]);
+
     }else if(avg<40){
-      signals.push(["⚠️","Sektorn är svag","Halvledarsektorn visar fortsatt teknisk press.","SVAG","bad"]);
+
+      signals.push([
+        "⚠️",
+        "Sektorn är svag",
+        "Halvledarsektorn visar fortsatt teknisk press.",
+        "SVAG",
+        "bad"
+      ]);
+
     }else{
-      signals.push(["🔄","Sektorn är neutral","Sektorn saknar ännu en tydlig riktning.","BEVAKA","warn"]);
+
+      signals.push([
+        "🔄",
+        "Sektorn är neutral",
+        "Sektorn saknar ännu en tydlig riktning.",
+        "BEVAKA",
+        "warn"
+      ]);
     }
   }
 
+
+  /* Aktiesignaler */
+
   stocks.forEach(x=>{
-    if(x.score>=75)
-      signals.push(["🟢",x.symbol+" – stark setup",`Momentum Score ${x.score}/100. ${x.trend}.`,"STARK","good"]);
-    else if(x.score<35)
-      signals.push(["🔴",x.symbol+" – svag trend",`Momentum Score ${x.score}/100. Tekniskt svag.`,"SVAG","bad"]);
 
-    if(x.rsi!==null && x.rsi<30)
-      signals.push(["📉",x.symbol+" – översåld",`RSI ${x.rsi.toFixed(2)}. Översåld nivå, inte automatisk köpsignal.`,"RSI","warn"]);
+    if(x.score>=75){
 
-    if(x.momentum20!==null && x.momentum20>0 && x.rsi!==null && x.rsi>=50 && x.score>=60)
-      signals.push(["💪",x.symbol+" – momentum positivt","20-dagars momentum är positivt och RSI visar styrka.","MOMENTUM","good"]);
+      signals.push([
+        "🟢",
+        x.symbol+" – stark setup",
+        `Momentum Score ${x.score}/100. ${x.trend}.`,
+        "STARK",
+        "good"
+      ]);
 
-    if(x.reversal==="Förbättras" || x.reversal==="Stark")
-      signals.push(["🔄",x.symbol+" – vändningsläge",`Bedömning: ${x.reversal}. Score ${x.score}/100.`,"BEVAKA","good"]);
+    }else if(x.score<35){
+
+      signals.push([
+        "🔴",
+        x.symbol+" – svag trend",
+        `Momentum Score ${x.score}/100. Tekniskt svag.`,
+        "SVAG",
+        "bad"
+      ]);
+    }
+
+
+    if(x.rsi!==null && x.rsi<30){
+
+      signals.push([
+        "📉",
+        x.symbol+" – översåld",
+        `RSI ${x.rsi.toFixed(2)}. Översåld nivå, inte automatisk köpsignal.`,
+        "RSI",
+        "warn"
+      ]);
+    }
+
+
+    if(
+      x.momentum20!==null &&
+      x.momentum20>0 &&
+      x.rsi!==null &&
+      x.rsi>=50 &&
+      x.score>=60
+    ){
+
+      signals.push([
+        "💪",
+        x.symbol+" – momentum positivt",
+        "20-dagars momentum är positivt och RSI visar styrka.",
+        "MOMENTUM",
+        "good"
+      ]);
+    }
+
+
+    if(x.reversal==="Förbättras" || x.reversal==="Stark"){
+
+      signals.push([
+        "🔄",
+        x.symbol+" – vändningsläge",
+        `Bedömning: ${x.reversal}. Score ${x.score}/100.`,
+        "BEVAKA",
+        "good"
+      ]);
+    }
+
   });
 
+
+  /* Inga signaler */
+
   if(!signals.length){
-    signals.push(["⌛","Inga tydliga signaler ännu","Inväntar tillräcklig och användbar data.","AVVAKTA","warn"]);
+
+    signals.push([
+      "⌛",
+      "Inga tydliga signaler ännu",
+      "Inväntar tillräcklig och användbar data.",
+      "AVVAKTA",
+      "warn"
+    ]);
   }
 
-  document.getElementById("signalList").innerHTML=signals.map(s=>`
-    <div class="signal">
-      <div class="signalicon">${s[0]}</div>
-      <div class="signalcontent">
-        <div class="signaltitle">${s[1]}</div>
-        <div class="signaldesc">${s[2]}</div>
+
+  /* Rendera */
+
+  document.getElementById("signalList").innerHTML=
+    signals.map(s=>`
+
+      <div class="signal">
+
+        <div class="signalicon">${s[0]}</div>
+
+        <div class="signalcontent">
+          <div class="signaltitle">${s[1]}</div>
+          <div class="signaldesc">${s[2]}</div>
+        </div>
+
+        <div class="signalval ${s[4]}">${s[3]}</div>
+
       </div>
-      <div class="signalval ${s[4]}">${s[3]}</div>
-    </div>
-  `).join("");
+
+    `).join("");
 }
 
+
+/* =====================================================
+   RENDER ALL
+===================================================== */
+
 function renderAll(){
+
   renderOverview();
   renderStocks();
   renderMarket();
   renderSignals();
+
 }
 
-/* Start */
+
+/* =====================================================
+   START
+===================================================== */
+
+/* Initial hämtning */
 loadData();
+
+/* Automatisk uppdatering var 15:e minut */
 setInterval(loadData,15*60*1000);
+
 </script>
 </body>
 </html>
