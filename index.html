@@ -1,178 +1,300 @@
-
 <!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<meta name="description" content="AI Turnaround Radar – bevaka vändningar i AI och halvledare.">
 <title>AI Turnaround Radar</title>
 
 <style>
-:root{
-  --bg:#07111f;--panel:#0d1b2b;--panel2:#102235;--border:#20354b;
-  --text:#e7eef7;--muted:#91a6bc;--cyan:#41d4e8;
-  --green:#44d39a;--yellow:#f2c66d;--red:#f07883;
+:root {
+  --bg:#07111f;
+  --panel:#101f30;
+  --panel2:#14263b;
+  --border:#24394f;
+  --text:#eaf2fc;
+  --muted:#94a8be;
+  --cyan:#45d4e8;
+  --green:#35d49a;
+  --red:#ff7184;
+  --yellow:#f4c96b;
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{padding:22px 18px 12px}
-.brand{display:flex;gap:13px;align-items:center}
-.logo{width:54px;height:54px;border-radius:17px;border:1px solid #24506b;background:#10283c;display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:28px}
-h1{font-size:22px;margin:0;font-weight:800}
-.subtitle{color:var(--muted);margin-top:3px;font-size:13px}
-.status{margin:15px 0 0;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:30px;font-size:12px;color:var(--muted)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--yellow)}
-.dot.live{background:var(--green)}
-nav{display:flex;gap:8px;overflow-x:auto;padding:12px 14px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:5}
-nav button{border:1px solid var(--border);background:var(--panel);color:var(--muted);border-radius:12px;padding:10px 13px;white-space:nowrap;font-size:14px}
-nav button.active{color:var(--cyan);border-color:#2b8094;background:#10283b}
-main{padding:15px;max-width:1000px;margin:auto}
-.page{display:none}.page.active{display:block}
-.card{background:linear-gradient(145deg,var(--panel),#0a1827);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:15px}
-.card-title{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:12px;text-transform:uppercase}
-.big-score{font-size:56px;font-weight:850;margin:17px 0 4px}
-.big-score small{font-size:22px;color:var(--muted);font-weight:500}
-.pill{display:inline-block;padding:8px 12px;border-radius:30px;font-weight:700;font-size:13px;margin:5px 0 15px;background:#292619;color:var(--yellow)}
-.pill.good{background:#102c25;color:var(--green)}
-.pill.bad{background:#2c1822;color:var(--red)}
-.progress{height:9px;border-radius:20px;background:#20354b;overflow:hidden}
-.progress span{display:block;height:100%;background:var(--cyan);border-radius:20%;transition:width .4s}
-.note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.55}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.stat{background:#0a1929;border:1px solid #1c3348;border-radius:15px;padding:14px}
-.stat label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}
-.stat strong{font-size:16px}
-.good-text{color:var(--green)}.bad-text{color:var(--red)}.neutral-text{color:var(--yellow)}
-.section-heading{font-size:17px;font-weight:800;margin:22px 0 13px}
-.stock-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.stock{background:var(--panel);border:1px solid var(--border);border-radius:17px;padding:15px;cursor:pointer}
-.stock h3{margin:0;font-size:19px}
-.stock .name{color:var(--muted);font-size:12px;margin-top:3px}
-.price{font-size:25px;font-weight:800;margin-top:14px}
-.change{font-size:13px;margin-top:4px}
-.score-wrap{margin-top:13px}
-.score-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
-.mini-progress{height:6px;border-radius:20px;background:#20354b;overflow:hidden}
-.mini-progress span{display:block;height:100%;background:var(--cyan);border-radius:20px}
-.stock-foot{font-size:12px;color:var(--muted);margin-top:8px}
-.detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;line-height:1.8}
-.stock.open .detail{display:block}
-.signal-row{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--border);padding:13px 0}
-.signal-row:last-child{border-bottom:0}
-.signal-row span{color:var(--muted);font-size:13px}
-.signal-row strong{text-align:right;font-size:13px}
-.btn{background:#123247;color:var(--cyan);border:1px solid #285a75;border-radius:12px;padding:11px 14px;font-weight:700}
-.toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:13px}
-.small{font-size:12px;color:var(--muted)}
-.error{background:#321b23;border:1px solid #67303b;color:#ffb6c0;padding:13px;border-radius:14px;margin:12px 0}
-.loading{color:var(--muted);padding:18px;text-align:center}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
-.badge{display:inline-block;border:1px solid var(--border);padding:4px 8px;border-radius:20px;font-size:11px;margin-top:5px;color:var(--muted)}
-.signal-good{color:var(--green)}
-.signal-bad{color:var(--red)}
-.signal-neutral{color:var(--yellow)}
-.indicator-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
-.indicator{background:#0a1929;border:1px solid #1c3348;border-radius:12px;padding:10px}
-.indicator .label{font-size:11px;color:var(--muted)}
-.indicator .value{font-weight:800;font-size:15px;margin-top:5px}
-@media(min-width:650px){
-  .grid{grid-template-columns:repeat(4,1fr)}
-  .stock-grid{grid-template-columns:repeat(3,1fr)}
+* { box-sizing:border-box; }
+body {
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+.app { max-width:1000px;margin:auto;padding:18px 14px 100px; }
+header {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:15px;
+}
+.brand { display:flex;align-items:center;gap:11px; }
+.logo {
+  width:44px;height:44px;border-radius:14px;
+  background:linear-gradient(135deg,#1769ff,#29cba0);
+  display:grid;place-items:center;font-size:22px;
+}
+.brand h1 { font-size:20px;margin:0;letter-spacing:.3px; }
+.brand small { color:var(--muted);display:block;margin-top:3px; }
+.status {
+  border:1px solid var(--border);border-radius:30px;
+  padding:8px 11px;font-size:11px;color:var(--muted);white-space:nowrap;
+}
+.status.live { color:var(--green); }
+.status.error { color:var(--red); }
+
+.tabs {
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:7px;margin:16px 0;position:sticky;top:0;z-index:5;
+  background:var(--bg);padding:7px 0;
+}
+.tab {
+  border:1px solid var(--border);border-radius:15px;
+  background:var(--panel);color:var(--muted);
+  padding:13px 5px;font-size:13px;cursor:pointer;
+}
+.tab.active {
+  border-color:var(--cyan);color:var(--cyan);
+  background:#10283a;
+}
+.section { display:none; }
+.section.active { display:block; }
+.section-heading { margin:24px 0 15px; }
+.section-heading h2 { font-size:22px;margin:0; }
+.section-heading p { color:var(--muted);font-size:13px;line-height:1.5; }
+.grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px; }
+.card,.stock {
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:18px;padding:15px;
+}
+.full { grid-column:1/-1; }
+.card-label { color:var(--muted);font-size:12px; }
+.big { font-size:26px;font-weight:800;margin-top:8px; }
+.small { color:var(--muted);font-size:12px;margin-top:5px; }
+.scorebox { display:flex;align-items:center;gap:15px; }
+.scorecircle {
+  width:90px;height:90px;border-radius:50%;
+  border:6px solid var(--border);display:grid;place-items:center;flex-shrink:0;
+}
+.scorecircle strong { font-size:25px; }
+.scorecircle small { display:block;text-align:center;font-size:10px;color:var(--muted); }
+.scoretitle { font-size:16px;font-weight:800; }
+.scoredesc { font-size:12px;color:var(--muted);line-height:1.5;margin-top:5px; }
+.stock { margin-bottom:12px; }
+.stocktop { display:flex;justify-content:space-between;gap:10px; }
+.ticker { font-size:20px;font-weight:850; }
+.company { color:var(--muted);font-size:12px;margin-top:3px; }
+.price { text-align:right;font-size:21px;font-weight:800; }
+.change { text-align:right;font-size:13px;margin-top:4px; }
+.green { color:var(--green); }
+.red { color:var(--red); }
+.yellow { color:var(--yellow); }
+.muted { color:var(--muted); }
+.badge {
+  display:inline-block;border-radius:30px;padding:6px 10px;
+  font-size:11px;font-weight:800;margin-top:10px;
+  background:#233247;color:var(--muted);
+}
+.badge.good { background:#123b31;color:var(--green); }
+.badge.bad { background:#4a2532;color:var(--red); }
+.badge.warn { background:#43371d;color:var(--yellow); }
+.stats { display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px; }
+.stat { background:var(--panel2);padding:9px;border-radius:10px;min-width:0; }
+.statlabel { font-size:10px;color:var(--muted); }
+.statvalue { font-size:13px;font-weight:750;margin-top:5px;overflow-wrap:anywhere; }
+.barbg { background:#24364a;height:7px;border-radius:10px;overflow:hidden;margin-top:8px; }
+.bar { height:100%;width:0;border-radius:10px;transition:width .4s; }
+.details { border-top:1px solid var(--border);margin-top:13px;padding-top:10px; }
+.detail { font-size:12px;line-height:1.6;margin:5px 0;color:var(--muted); }
+.detail b { color:var(--text); }
+.refresh {
+  background:var(--panel2);color:var(--text);border:1px solid var(--border);
+  border-radius:11px;padding:9px 12px;font-size:12px;font-weight:700;
+}
+.signal { display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border); }
+.signal:last-child { border-bottom:0; }
+.signalicon {
+  width:34px;height:34px;border-radius:11px;
+  background:var(--panel2);display:grid;place-items:center;flex-shrink:0;
+}
+.signalcontent { flex:1; }
+.signaltitle { font-size:13px;font-weight:750; }
+.signaldesc { color:var(--muted);font-size:11px;line-height:1.5;margin-top:4px; }
+.signalval { font-size:11px;font-weight:800; }
+.notice {
+  background:#12263b;border:1px solid #254460;border-radius:14px;
+  padding:12px;color:#afc9e4;font-size:12px;line-height:1.5;margin-top:12px;
+}
+.errorbox {
+  display:none;background:#3b202b;border:1px solid #653344;
+  color:#ffc0cb;border-radius:12px;padding:12px;
+  font-size:12px;line-height:1.5;margin:12px 0;
+}
+.footer { text-align:center;color:var(--muted);font-size:11px;padding:28px 0; }
+@media(min-width:720px) {
+  .grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .tabs { position:relative; }
 }
 </style>
 </head>
 
 <body>
+<div class="app">
 
 <header>
   <div class="brand">
-    <div class="logo">◎</div>
+    <div class="logo">📡</div>
     <div>
       <h1>AI TURNAROUND RADAR</h1>
-      <div class="subtitle">AI & halvledare · Vändningsbevakning</div>
+      <small>AI & halvledare · Vändningsbevakning</small>
     </div>
   </div>
-  <div id="connection" class="status"><span class="dot"></span> ANSLUTER TILL DATA</div>
+  <div id="status" class="status">● Ansluter</div>
 </header>
 
-<nav>
-  <button class="active" data-page="overview">Översikt</button>
-  <button data-page="market">Marknad</button>
-  <button data-page="stocks">Aktier</button>
-  <button data-page="signals">Signaler</button>
+<div class="status" style="display:inline-block;margin-bottom:12px">
+  <span style="color:var(--green)">●</span> LIVE DATA · FINNHUB + HISTORIK
+</div>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="overview">Översikt</button>
+  <button class="tab" data-tab="market">Marknad</button>
+  <button class="tab" data-tab="stocks">Aktier</button>
+  <button class="tab" data-tab="signals">Signaler</button>
 </nav>
 
-<main>
+<div id="errorBox" class="errorbox"></div>
 
-<section id="overview" class="page active">
-  <div class="toolbar">
-    <div class="small">SEKTOR-MOMENTUM</div>
-    <button class="btn" onclick="loadData()">↻ Uppdatera</button>
+<!-- ÖVERSIKT -->
+<section id="overview" class="section active">
+  <div class="section-heading">
+    <h2>MARKNADSÖVERSIKT</h2>
+    <p>Samlad teknisk bild av AI och halvledarsektorn.</p>
+    <button class="refresh" onclick="loadData()">↻ Uppdatera data</button>
   </div>
 
-  <div class="card">
-    <div class="card-title"><span>SEKTOR-MOMENTUM</span><span>SOXX / SMH</span></div>
-    <div id="sectorScore" class="big-score">-- <small>/ 100</small></div>
-    <div id="sectorPill" class="pill">Inväntar live-data</div>
-    <div class="progress"><span id="sectorBar" style="width:0%"></span></div>
-    <div class="note" id="sectorNote">Sektorpoängen beräknas från ETF:ernas dagsförändring och historiska trend.</div>
-  </div>
+  <div class="grid">
+    <div class="card full">
+      <div class="scorebox">
+        <div id="overallCircle" class="scorecircle">
+          <div><strong id="overallScore">--</strong><small>/100</small></div>
+        </div>
+        <div>
+          <div id="overallTitle" class="scoretitle">Inväntar data</div>
+          <div id="overallDesc" class="scoredesc">Radar analyserar marknaden.</div>
+        </div>
+      </div>
+    </div>
 
-  <div class="card">
-    <div class="card-title"><span>RADARSTATUS</span><span>INDIKATORER</span></div>
-    <div class="grid" id="overviewIndicators"></div>
-  </div>
-
-  <div class="section-heading">BEVAKADE AKTIER · TRYCK FÖR DETALJER</div>
-  <div id="overviewStocks" class="stock-grid"></div>
-</section>
-
-<section id="market" class="page">
-  <div class="section-heading">MARKNADSÖVERSIKT</div>
-  <div class="card">
-    <div class="card-title"><span>SEKTOR-ETF</span><span>LIVE</span></div>
-    <div id="marketETFs" class="stock-grid"></div>
-  </div>
-  <div class="card">
-    <div class="card-title"><span>MARKNADSTREND</span></div>
-    <div id="marketTrend"><div class="loading">Inväntar marknadsdata…</div></div>
-  </div>
-</section>
-
-<section id="stocks" class="page">
-  <div class="section-heading">BEVAKADE AKTIER</div>
-  <div class="small">Momentum är en indikator. En enskild poäng är inte en bekräftad vändningssignal.</div>
-  <div id="allStocks" class="stock-grid" style="margin-top:14px"></div>
-</section>
-
-<section id="signals" class="page">
-  <div class="section-heading">VÄNDNING & MOMENTUM</div>
-  <div class="card">
-    <div id="signalsContent"><div class="loading">Inväntar live-data…</div></div>
-  </div>
-  <div class="card">
-    <div class="card-title"><span>POÄNGMODELL</span></div>
-    <div class="signal-row"><span>Dagsmomentum</span><strong>20 %</strong></div>
-    <div class="signal-row"><span>20-dagars momentum</span><strong>25 %</strong></div>
-    <div class="signal-row"><span>Trend MA20/MA50</span><strong>25 %</strong></div>
-    <div class="signal-row"><span>RSI</span><strong>15 %</strong></div>
-    <div class="signal-row"><span>Volym</span><strong>15 %</strong></div>
-    <p class="note">Poängen beräknas endast från tillgängliga indikatorer. Saknade indikatorer tas bort ur beräkningen och återstående vikter skalas om.</p>
+    <div class="card">
+      <div class="card-label">Positiva aktier</div>
+      <div id="positive" class="big green">--</div>
+      <div class="small">Score 60 eller högre</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Svaga aktier</div>
+      <div id="negative" class="big red">--</div>
+      <div class="small">Score under 45</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Marknadsläge</div>
+      <div id="marketState" class="big" style="font-size:19px">--</div>
+      <div id="marketStateDesc" class="small">Inväntar data</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Senaste uppdatering</div>
+      <div id="updated" class="big" style="font-size:20px">--</div>
+      <div class="small">Automatisk var 15:e minut</div>
+    </div>
+    <div class="card full">
+      <div class="card-label">Snabböversikt</div>
+      <div id="quickView"></div>
+    </div>
   </div>
 </section>
 
-<div id="errorBox"></div>
-<div class="small" style="text-align:center;margin:15px" id="lastUpdate">Data har inte hämtats ännu.</div>
-</main>
+<!-- MARKNAD -->
+<section id="market" class="section">
+  <div class="section-heading">
+    <h2>SEKTORMARKNAD</h2>
+    <p>SOXX och SMH – styrkan i halvledarsektorn</p>
+  </div>
+  <div id="marketCards"></div>
+  <div class="notice">
+    SOXX och SMH används för att bedöma om sektorn som helhet visar styrka,
+    återhämtning eller fortsatt svaghet.
+  </div>
+</section>
 
-<footer>AI Turnaround Radar · Teknisk marknadsbevakning · Ej investeringsråd</footer>
+<!-- AKTIER -->
+<section id="stocks" class="section">
+  <div class="section-heading">
+    <h2>BEVAKADE AKTIER</h2>
+    <p>Momentum är en indikator. En enskild poäng är inte en bekräftad vändningssignal.</p>
+  </div>
+  <div id="stockCards"></div>
+</section>
+
+<!-- SIGNALER -->
+<section id="signals" class="section">
+  <div class="section-heading">
+    <h2>VÄNDNINGSSIGNALER</h2>
+    <p>Tekniska förändringar och tecken på förbättring</p>
+  </div>
+  <div class="card full">
+    <div id="signalList"></div>
+  </div>
+  <div class="card full" style="margin-top:12px">
+    <h3 style="margin-top:0">Så räknas radarn</h3>
+    <div class="signal">
+      <div class="signalicon">📈</div>
+      <div class="signalcontent">
+        <div class="signaltitle">Trend</div>
+        <div class="signaldesc">Pris i relation till MA20 och MA50 samt hur medelvärdena förhåller sig till varandra.</div>
+      </div>
+    </div>
+    <div class="signal">
+      <div class="signalicon">💪</div>
+      <div class="signalcontent">
+        <div class="signaltitle">RSI 14</div>
+        <div class="signaldesc">Momentum och styrka. Översålda nivåer är inte automatiskt en köpsignal.</div>
+      </div>
+    </div>
+    <div class="signal">
+      <div class="signalicon">🔄</div>
+      <div class="signalcontent">
+        <div class="signaltitle">20-dagars momentum</div>
+        <div class="signaldesc">Förändring från ungefär 20 handelsdagar tidigare.</div>
+      </div>
+    </div>
+    <div class="signal">
+      <div class="signalicon">🔊</div>
+      <div class="signalcontent">
+        <div class="signaltitle">Volym</div>
+        <div class="signaldesc">Aktuell volym i förhållande till genomsnittet.</div>
+      </div>
+    </div>
+  </div>
+  <div class="notice">
+    Detta är ett tekniskt bevakningsverktyg, inte en garanti eller automatisk köp- eller säljsignal.
+  </div>
+</section>
+
+<div class="footer">
+  AI Turnaround Radar<br>
+  Data via Finnhub och Cloudflare Worker
+</div>
+</div>
 
 <script>
-/* Cloudflare Worker */
-const API_URL = "https://withered-block-6280.henrikt123.workers.dev/api/radar";
+/* Worker som vi uppdaterade */
+const API_URL = "https://ai-radar.henrikt123.workers.dev/api/radar";
 
-const WATCH = {
+const SYMBOLS = ["NVDA","MU","AMD","AVGO","SOXX","SMH"];
+const STOCKS = ["NVDA","MU","AMD","AVGO"];
+
+const NAMES = {
   NVDA:"NVIDIA",
   MU:"Micron Technology",
   AMD:"Advanced Micro Devices",
@@ -181,499 +303,335 @@ const WATCH = {
   SMH:"VanEck Semiconductor ETF"
 };
 
-let marketData=[];
-let lastSuccessfulFetch=null;
-let sectorMomentum=null;
-
-const $=id=>document.getElementById(id);
-
-function fmt(value){
-  if(value===null||value===undefined||!Number.isFinite(Number(value)))return "–";
-  return Number(value).toLocaleString("sv-SE",{maximumFractionDigits:2});
-}
-function pct(value){
-  if(value===null||value===undefined||!Number.isFinite(Number(value)))return "–";
-  return (Number(value)>0?"+":"")+Number(value).toFixed(2)+"%";
-}
-function tone(value){
-  if(value>0)return "good-text";
-  if(value<0)return "bad-text";
-  return "neutral-text";
-}
-function scoreTone(score){
-  if(score>=70)return "good-text";
-  if(score<=35)return "bad-text";
-  return "neutral-text";
-}
-function escapeHTML(value){
-  return String(value??"").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
-}
+let data = {};
+let busy = false;
 
 /* Navigation */
-document.querySelectorAll("nav button").forEach(button=>{
+document.querySelectorAll(".tab").forEach(button=>{
   button.addEventListener("click",()=>{
-    document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
     button.classList.add("active");
-    $(button.dataset.page).classList.add("active");
+    document.getElementById(button.dataset.tab).classList.add("active");
   });
 });
 
-/* Normalisera olika API-format */
-function normalizeData(payload){
-  if(Array.isArray(payload))return payload;
-  if(Array.isArray(payload?.stocks))return payload.stocks;
-  if(Array.isArray(payload?.results))return payload.results;
-  if(Array.isArray(payload?.data))return payload.data;
-  if(Array.isArray(payload?.result))return payload.result;
-
-  if(payload?.results&&typeof payload.results==="object"){
-    return Object.entries(payload.results).map(([symbol,item])=>({symbol,...item}));
-  }
-  if(payload?.data&&typeof payload.data==="object"){
-    return Object.entries(payload.data).map(([symbol,item])=>({symbol,...item}));
-  }
-  return [];
+/* Helpers */
+function number(v){
+  if(v===null || v===undefined || v==="" || v==="Saknas") return null;
+  const n=Number(v);
+  return Number.isFinite(n)?n:null;
 }
-function findSymbol(symbol){
-  return marketData.find(x=>String(x.symbol||x.ticker||"").toUpperCase()===symbol);
+function safe(v,digits=2){
+  const n=number(v);
+  return n===null?"Saknas":n.toFixed(digits);
+}
+function price(v){
+  const n=number(v);
+  return n===null?"Saknas":n.toLocaleString("sv-SE",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function pct(v){
+  const n=number(v);
+  if(n===null)return "Saknas";
+  return (n>0?"+":"")+n.toFixed(2)+"%";
+}
+function signClass(v){
+  const n=number(v);
+  return n===null?"":n>0?"green":n<0?"red":"";
+}
+function scoreClass(s){
+  if(s===null)return "warn";
+  return s>=60?"good":s<45?"bad":"warn";
+}
+function scoreColor(s){
+  if(s===null)return "var(--border)";
+  if(s>=70)return "var(--green)";
+  if(s>=50)return "var(--yellow)";
+  return "var(--red)";
+}
+function scoreLabel(s){
+  if(s===null)return "Score saknas";
+  if(s>=80)return "Stark teknisk bild";
+  if(s>=70)return "Positiv";
+  if(s>=60)return "Förbättras";
+  if(s>=45)return "Neutral / bevaka";
+  return "Svag";
+}
+function scoreDescription(s){
+  if(s===null)return "Otillräcklig data för att beräkna marknadspoäng.";
+  if(s>=80)return "Flera indikatorer visar styrka.";
+  if(s>=70)return "Tekniska faktorer är övervägande positiva.";
+  if(s>=60)return "Tecken på förbättring finns, men behöver bekräftelse.";
+  if(s>=45)return "Marknaden saknar ännu en tydlig positiv riktning.";
+  return "Den tekniska bilden är svag.";
 }
 
-/* Hitta candles/historik från flera möjliga fält */
-function getCandles(item){
-  if(!item)return [];
-  let c=item.candles||item.history||item.historicalData||item.bars||[];
-  if(!Array.isArray(c))return [];
-  return c.map(x=>({
-    date:x.date||x.timestamp||x.time,
-    close:Number(x.close),
-    volume:Number(x.volume)
-  })).filter(x=>Number.isFinite(x.close))
-   .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+/* Läs exakt format från Worker:
+   { success:true, results:{NVDA:{...},MU:{...}} }
+*/
+function normalize(payload){
+  const source=payload?.results || {};
+  const normalized={};
+
+  SYMBOLS.forEach(symbol=>{
+    const raw=source[symbol];
+    if(!raw)return;
+
+    const score=number(raw.score ?? raw.momentumScore);
+
+    normalized[symbol]={
+      symbol,
+      name:NAMES[symbol],
+      price:number(raw.price),
+      changePercent:number(raw.changePercent),
+      rsi:number(raw.rsi),
+      ma20:number(raw.ma20),
+      ma50:number(raw.ma50),
+      momentum20:number(raw.momentum20),
+      volume:number(raw.volume),
+      averageVolume:number(raw.averageVolume),
+      volumeRatio:number(raw.volumeRatio),
+      historicalDays:number(raw.historicalDays),
+      score,
+      trend:raw.trend || "Saknas",
+      reversal:raw.reversal || "Saknas",
+      error:raw.error || null
+    };
+  });
+
+  return normalized;
 }
 
-function getField(item,...names){
-  for(const name of names){
-    if(item&&item[name]!==undefined&&item[name]!==null){
-      const value=Number(item[name]);
-      if(Number.isFinite(value))return value;
+/* Fetch Worker */
+async function loadData(){
+  if(busy)return;
+  busy=true;
+
+  const status=document.getElementById("status");
+  const errorBox=document.getElementById("errorBox");
+  errorBox.style.display="none";
+  status.className="status";
+  status.textContent="● Uppdaterar";
+
+  try{
+    const response=await fetch(API_URL+"?t="+Date.now(),{cache:"no-store"});
+    if(!response.ok)throw new Error("HTTP "+response.status);
+
+    const payload=await response.json();
+    if(payload.success===false)throw new Error(payload.error || "Worker rapporterade fel");
+
+    const normalized=normalize(payload);
+    if(!Object.keys(normalized).length){
+      throw new Error("Worker-svaret saknar aktiedata i results.");
     }
+
+    data=normalized;
+    renderAll();
+
+    status.className="status live";
+    status.textContent="● LIVE DATA";
+
+    document.getElementById("updated").textContent=
+      new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
+
+  }catch(e){
+    console.error(e);
+    status.className="status error";
+    status.textContent="● DATAFEL";
+
+    errorBox.style.display="block";
+    errorBox.textContent="Kunde inte läsa Worker-data: "+e.message+
+      ". Kontrollera Worker och API-anslutningen.";
+
+    renderAll();
+  }finally{
+    busy=false;
   }
-  return null;
 }
 
-/* RSI 14 */
-function calculateRSI(closes,period=14){
-  if(closes.length<period+1)return null;
-  const changes=[];
-  for(let i=1;i<closes.length;i++)changes.push(closes[i]-closes[i-1]);
-
-  let gains=0,losses=0;
-  for(let i=0;i<period;i++){
-    if(changes[i]>0)gains+=changes[i];
-    else losses+=Math.abs(changes[i]);
-  }
-  let avgGain=gains/period;
-  let avgLoss=losses/period;
-
-  for(let i=period;i<changes.length;i++){
-    const gain=changes[i]>0?changes[i]:0;
-    const loss=changes[i]<0?Math.abs(changes[i]):0;
-    avgGain=(avgGain*(period-1)+gain)/period;
-    avgLoss=(avgLoss*(period-1)+loss)/period;
-  }
-  if(avgLoss===0)return 100;
-  return 100-(100/(1+avgGain/avgLoss));
-}
-
-function average(values){
-  const valid=values.filter(v=>Number.isFinite(v));
-  if(!valid.length)return null;
-  return valid.reduce((a,b)=>a+b,0)/valid.length;
-}
-
-/* Samla indikatorer */
-function indicators(item){
-  const candles=getCandles(item);
-  const closes=candles.map(x=>x.close);
-  const volumes=candles.map(x=>x.volume).filter(Number.isFinite);
-
-  const latest=closes.at(-1);
-  const ma20=closes.length>=20?average(closes.slice(-20)):null;
-  const ma50=closes.length>=50?average(closes.slice(-50)):null;
-  const rsi=calculateRSI(closes,14);
-
-  let momentum20=null;
-  if(closes.length>=21){
-    momentum20=((latest/closes[closes.length-21])-1)*100;
-  }
-
-  let volumeRatio=null;
-  if(volumes.length>=2){
-    const prior=volumes.slice(-21,-1);
-    const avgVol=average(prior);
-    if(avgVol&&avgVol>0)volumeRatio=volumes.at(-1)/avgVol;
-  }
-
-  /* Fallback: använd indikatorer som Worker redan beräknat */
-  return {
-    candles,
-    rsi:rsi??getField(item,"rsi","RSI"),
-    ma20:ma20??getField(item,"ma20","MA20","MA20"),
-    ma50:ma50??getField(item,"ma50","MA50"),
-    momentum20:momentum20??getField(item,"momentum20","momentum20"),
-    volumeRatio:volumeRatio??getField(item,"volumeRatio","volumeRatio"),
-    trend:item?.trend||item?.Trend||null,
-    historyDays:item?.historyDays??candles.length
-  };
-}
-
-/* Dagsmomentum: -5% = 0 och +5% = 100 */
-function dailyMomentum(changePct){
-  const v=Number(changePct);
-  if(!Number.isFinite(v))return null;
-  return Math.max(0,Math.min(100,((v+5)/10)*100));
-}
-
-/* Poäng för historisk trend */
-function trendScore(ind){
-  if(ind.ma20===null||ind.ma50===null)return null;
-  if(ind.ma20>ind.ma50)return 80;
-  if(ind.ma20<ind.ma50)return 20;
-  return 50;
-}
-
-/* RSI-poäng: mest intressant vid återhämtning från översålt */
-function rsiScore(rsi){
-  if(rsi===null)return null;
-  if(rsi<=25)return 100;
-  if(rsi<=35)return 85;
-  if(rsi<=45)return 70;
-  if(rsi<=60)return 55;
-  if(rsi<=70)return 35;
-  return 15;
-}
-
-/* Volym: högre än normal volym kan stärka en vändning */
-function volumeScore(ratio){
-  if(ratio===null)return null;
-  if(ratio>=2)return 100;
-  if(ratio>=1.5)return 85;
-  if(ratio>=1.2)return 70;
-  if(ratio>=0.8)return 50;
-  if(ratio>=0.5)return 30;
-  return 15;
-}
-
-/* Momentum-poäng */
-function momentumScore(momentum){
-  if(momentum===null)return null;
-  return Math.max(0,Math.min(100,((momentum+10)/20)*100));
-}
-
-/* Aktiepoäng med tillgängliga indikatorer */
-function calculateStockScore(item){
-  if(!item)return null;
-
-  const ind=indicators(item);
-  const components=[
-    {score:dailyMomentum(item.changePct),weight:20},
-    {score:momentumScore(ind.momentum20),weight:25},
-    {score:trendScore(ind),weight:25},
-    {score:rsiScore(ind.rsi),weight:15},
-    {score:volumeScore(ind.volumeRatio),weight:15}
-  ].filter(x=>x.score!==null);
-
-  if(!components.length)return null;
-  const totalWeight=components.reduce((a,b)=>a+b.weight,0);
-  return Math.round(components.reduce((a,b)=>a+b.score*a.weight,0)/totalWeight);
-}
-
-function calculateSectorScore(){
-  const etfs=["SOXX","SMH"].map(findSymbol).filter(x=>x);
-  if(!etfs.length)return null;
-
-  const scores=etfs.map(item=>{
-    const score=calculateStockScore(item);
-    return score;
-  }).filter(x=>x!==null);
-
-  if(!scores.length)return null;
-  return Math.round(average(scores));
-}
-
-function sectorLabel(score){
-  if(score>=80)return "STARKT VÄNDNINGSMOMENTUM";
-  if(score>=65)return "POSITIVT MOMENTUM";
-  if(score>=45)return "NEUTRALT";
-  if(score>=25)return "NEGATIVT MOMENTUM";
-  return "SVAGT MOMENTUM";
-}
-
-function momentumLabel(score){
-  if(score===null)return "Data saknas";
-  if(score>=80)return "Mycket starkt";
-  if(score>=65)return "Positivt";
-  if(score>=45)return "Neutral";
-  if(score>=25)return "Pressad";
-  return "Svagt";
-}
-
-function signalClass(text){
-  if(/stark|positiv|återhämtning/i.test(text))return "good";
-  if(/svag|negativ|pressad/i.test(text))return "bad";
-  return "";
-}
-
-function signalFromIndicators(item){
-  if(!item)return "Data saknas";
-  const ind=indicators(item);
-  const score=calculateStockScore(item);
-  if(score===null)return "Data saknas";
-
-  const positives=[];
-  const negatives=[];
-
-  if(ind.rsi!==null){
-    if(ind.rsi<=35)positives.push("RSI översåld");
-    if(ind.rsi>=70)negatives.push("RSI överköpt");
-  }
-  if(ind.ma20!==null&&ind.ma50!==null){
-    if(ind.ma20>ind.ma50)positives.push("MA20 över MA50");
-    else negatives.push("MA20 under MA50");
-  }
-  if(ind.momentum20!==null){
-    if(ind.momentum20>0)positives.push("20d momentum positivt");
-    else negatives.push("20d momentum negativt");
-  }
-  if(ind.volumeRatio!==null&&ind.volumeRatio>=1.5)positives.push("Volym över normal");
-  
-  if(score>=70&&positives.length>=2)return "Möjlig återhämtning";
-  if(score>=60&&positives.length>=1)return "Förbättrat momentum";
-  if(score<=35)return "Svagt momentum";
-  return "Bevaka";
-}
-
-/* Kort */
-function stockCard(symbol){
-  const item=findSymbol(symbol);
-  const price=item?.latest??item?.price??item?.close;
-  const change=item?.changePct;
-  const score=calculateStockScore(item);
-  const ind=indicators(item);
-  const signal=signalFromIndicators(item);
-  const label=WATCH[symbol];
-
-  const rsiText=ind.rsi===null?"Saknas":fmt(ind.rsi);
-  const ma20Text=ind.ma20===null?"Saknas":fmt(ind.ma20);
-  const ma50Text=ind.ma50===null?"Saknas":fmt(ind.ma50);
-  const volumeText=ind.volumeRatio===null?"Saknas":ind.volumeRatio.toFixed(2)+"x normal";
-  const momentumText=ind.momentum20===null?"Saknas":pct(ind.momentum20);
-  const trendText=ind.trend||(
-    ind.ma20!==null&&ind.ma50!==null?
-      (ind.ma20>ind.ma50?"Positiv":"Negativ"):"Saknas"
-  );
+/* Aktie-kort */
+function stockCard(x){
+  const s=x.score;
+  const barWidth=s===null?0:Math.max(0,Math.min(100,s));
 
   return `
-  <article class="stock" onclick="this.classList.toggle('open')">
-    <h3>${symbol}</h3>
-    <div class="name">${label}</div>
-    <div class="price">${item?fmt(price):"–"}</div>
-    <div class="change ${tone(change)}">${item?pct(change):"Ingen data"}</div>
-
-    <div class="score-wrap">
-      <div class="score-label">
-        <span>Momentum Score</span>
-        <strong class="${scoreTone(score)}">${score===null?"–":score+"/100"}</strong>
+  <article class="stock">
+    <div class="stocktop">
+      <div>
+        <div class="ticker">${x.symbol}</div>
+        <div class="company">${x.name}</div>
       </div>
-      <div class="mini-progress">
-        <span style="width:${score===null?0:score}%;background:${score>=65?"var(--green)":score<=35?"var(--red)":"var(--cyan)"}"></span>
+      <div>
+        <div class="price">${x.price===null?"Saknas":price(x.price)}</div>
+        <div class="change ${signClass(x.changePercent)}">${pct(x.changePercent)}</div>
       </div>
     </div>
 
-    <div class="stock-foot">${momentumLabel(score)}</div>
-    <div class="badge">${escapeHTML(signal)}</div>
+    <div class="badge ${scoreClass(s)}">
+      ${scoreLabel(s)} · ${s===null?"Saknas":s+"/100"}
+    </div>
 
-    <div class="detail">
-      <b>Senaste pris:</b> ${fmt(price)}<br>
-      <b>Dagsförändring:</b> ${pct(change)}<br>
-      <b>Momentum Score:</b> ${score===null?"–":score+"/100"}<br>
-      <b>RSI 14:</b> ${rsiText}<br>
-      <b>MA20:</b> ${ma20Text}<br>
-      <b>MA50:</b> ${ma50Text}<br>
-      <b>20-dagars momentum:</b> ${momentumText}<br>
-      <b>Volym:</b> ${volumeText}<br>
-      <b>Trend:</b> ${trendText}<br>
-      <b>Historiska dagar:</b> ${ind.historyDays}<br>
-      <b>Vändningsbedömning:</b> ${escapeHTML(signal)}<br>
-      <b>Datakälla:</b> Finnhub Live + StashGamma historik
+    <div class="stats">
+      <div class="stat">
+        <div class="statlabel">RSI 14</div>
+        <div class="statvalue">${safe(x.rsi)}</div>
+      </div>
+      <div class="stat">
+        <div class="statlabel">MA20</div>
+        <div class="statvalue">${price(x.ma20)}</div>
+      </div>
+      <div class="stat">
+        <div class="statlabel">MA50</div>
+        <div class="statvalue">${price(x.ma50)}</div>
+      </div>
+    </div>
+
+    <div style="margin-top:13px">
+      <div class="card-label">Momentum Score</div>
+      <div style="font-weight:800;margin-top:4px;color:${scoreColor(s)}">
+        ${s===null?"Saknas":s+"/100"}
+      </div>
+      <div class="barbg">
+        <div class="bar" style="width:${barWidth}%;background:${scoreColor(s)}"></div>
+      </div>
+    </div>
+
+    <div class="small" style="margin-top:8px">${s===null?"Score kan inte beräknas":scoreLabel(s)}</div>
+    <div class="badge ${scoreClass(s)}">${x.reversal}</div>
+
+    <div class="details">
+      <div class="detail"><b>Senaste pris:</b> ${price(x.price)}</div>
+      <div class="detail"><b>Dagsförändring:</b> <span class="${signClass(x.changePercent)}">${pct(x.changePercent)}</span></div>
+      <div class="detail"><b>Momentum Score:</b> ${s===null?"Saknas":s+"/100"}</div>
+      <div class="detail"><b>RSI 14:</b> ${safe(x.rsi)}</div>
+      <div class="detail"><b>MA20:</b> ${price(x.ma20)}</div>
+      <div class="detail"><b>MA50:</b> ${price(x.ma50)}</div>
+      <div class="detail"><b>20-dagars momentum:</b> ${pct(x.momentum20)}</div>
+      <div class="detail"><b>Volym:</b> ${x.volumeRatio===null?"Saknas":x.volumeRatio.toFixed(2)+"x normal"}</div>
+      <div class="detail"><b>Trend:</b> ${x.trend}</div>
+      <div class="detail"><b>Historiska dagar:</b> ${x.historicalDays===null?"Saknas":x.historicalDays}</div>
+      <div class="detail"><b>Vändningsbedömning:</b> ${x.reversal}</div>
+      <div class="detail"><b>Datakälla:</b> Finnhub Live + Historik</div>
     </div>
   </article>`;
 }
 
 /* Översikt */
 function renderOverview(){
-  const score=sectorMomentum;
+  const items=Object.values(data);
+  const valid=items.filter(x=>x.score!==null);
+  const avg=valid.length?Math.round(valid.reduce((sum,x)=>sum+x.score,0)/valid.length):null;
 
-  if(score===null){
-    $("sectorScore").innerHTML='-- <small>/ 100</small>';
-    $("sectorPill").textContent="Data saknas";
-    $("sectorNote").textContent="ETF-data saknas.";
-    $("sectorBar").style.width="0%";
-  }else{
-    $("sectorScore").innerHTML=`${score} <small>/ 100</small>`;
-    const label=sectorLabel(score);
-    $("sectorPill").textContent=label;
-    $("sectorPill").className="pill "+signalClass(label);
-    $("sectorBar").style.width=score+"%";
-    $("sectorNote").textContent="Sektorpoängen baseras på dagsmomentum och historiska indikatorer från SOXX och SMH.";
+  document.getElementById("overallScore").textContent=avg===null?"--":avg;
+  document.getElementById("overallCircle").style.borderColor=scoreColor(avg);
+  document.getElementById("overallTitle").textContent=scoreLabel(avg);
+  document.getElementById("overallDesc").textContent=scoreDescription(avg);
+
+  document.getElementById("positive").textContent=valid.filter(x=>x.score>=60).length;
+  document.getElementById("negative").textContent=valid.filter(x=>x.score<45).length;
+
+  let state="Inväntar data",desc="Ingen sektoranalys ännu.";
+  if(avg!==null){
+    if(avg>=70){state="Positiv";desc="Bred teknisk styrka";}
+    else if(avg>=55){state="Återhämtning";desc="Tecken på förbättring";}
+    else if(avg>=45){state="Neutral";desc="Ingen tydlig riktning";}
+    else{state="Svag";desc="Sektorn är under press";}
   }
+  document.getElementById("marketState").textContent=state;
+  document.getElementById("marketStateDesc").textContent=desc;
 
-  const soxx=findSymbol("SOXX"),smh=findSymbol("SMH");
-  const avg=average([soxx?.changePct,smh?.changePct].filter(v=>Number.isFinite(Number(v))));
-  const trend=avg===null?"Data saknas":avg>0?"Uppåt":avg<0?"Nedåt":"Neutral";
-
-  const stocks=["NVDA","MU","AMD","AVGO"].map(findSymbol).filter(Boolean);
-  const up=stocks.filter(x=>Number(x.changePct)>0).length;
-  const breadth=stocks.length?`${up} av ${stocks.length} stiger`:"Data saknas";
-  const breadthClass=stocks.length?(up>=3?"good-text":up<=1?"bad-text":"neutral-text"):"neutral-text";
-
-  const totalHistory=stocks.map(indicators);
-  const rsiValues=totalHistory.map(x=>x.rsi).filter(x=>x!==null);
-  const volumeValues=totalHistory.map(x=>x.volumeRatio).filter(x=>x!==null);
-  const momentumValues=totalHistory.map(x=>x.momentum20).filter(x=>x!==null);
-
-  $("overviewIndicators").innerHTML=`
-    <div class="stat"><label>Sektor-momentum</label><strong class="${scoreTone(score)}">${score===null?"Data saknas":score+"/100"}</strong></div>
-    <div class="stat"><label>ETF-trend</label><strong class="${tone(avg)}">${trend}</strong></div>
-    <div class="stat"><label>Watchlist-bredd</label><strong class="${breadthClass}">${breadth}</strong></div>
-    <div class="stat"><label>Historik</label><strong>${totalHistory.some(x=>x.candles.length)?"Tillgänglig":"Saknas"}</strong></div>
-    <div class="stat"><label>Genomsnitt RSI</label><strong>${rsiValues.length?fmt(average(rsiValues)):"Saknas"}</strong></div>
-    <div class="stat"><label>Genomsnitt volym</label><strong>${volumeValues.length?fmt(average(volumeValues))+"x":"Saknas"}</strong></div>
-    <div class="stat"><label>20d momentum</label><strong class="${tone(average(momentumValues))}">${momentumValues.length?pct(average(momentumValues)):"Saknas"}</strong></div>
-    <div class="stat"><label>Historiska aktier</label><strong>${totalHistory.filter(x=>x.candles.length).length} av ${stocks.length}</strong></div>
-  `;
-
-  $("overviewStocks").innerHTML=["NVDA","MU","AMD","AVGO"].map(stockCard).join("");
-}
-
-/* Marknad */
-function renderMarket(){
-  $("marketETFs").innerHTML=["SOXX","SMH"].map(stockCard).join("");
-  const soxx=findSymbol("SOXX"),smh=findSymbol("SMH");
-
-  const list=[["SOXX",soxx],["SMH",smh]];
-  $("marketTrend").innerHTML=list.map(([symbol,item])=>{
-    const ind=indicators(item);
-    return `
-    <div class="signal-row">
-      <span>${symbol} · ${WATCH[symbol]}</span>
-      <strong class="${tone(item?.changePct)}">${item?pct(item.changePct):"Data saknas"}</strong>
-    </div>
-    <div class="signal-row">
-      <span>${symbol} RSI</span><strong>${ind.rsi===null?"Saknas":fmt(ind.rsi)}</strong>
-    </div>
-    <div class="signal-row">
-      <span>${symbol} MA20 / MA50</span><strong>${ind.ma20===null||ind.ma50===null?"Saknas":fmt(ind.ma20)+" / "+fmt(ind.ma50)}</strong>
-    </div>
-    <div class="signal-row">
-      <span>${symbol} 20d momentum</span><strong class="${tone(ind.momentum20)}">${ind.momentum20===null?"Saknas":pct(ind.momentum20)}</strong>
-    </div>
-    <div class="signal-row">
-      <span>${symbol} volym</span><strong>${ind.volumeRatio===null?"Saknas":ind.volumeRatio.toFixed(2)+"x normal"}</strong>
-    </div>`;
-  }).join("");
-}
-
-/* Aktier */
-function renderStocks(){
-  $("allStocks").innerHTML=Object.keys(WATCH).map(stockCard).join("");
-}
-
-/* Signaler */
-function renderSignals(){
-  const symbols=Object.keys(WATCH);
-
-  const sorted=symbols.map(symbol=>{
-    const item=findSymbol(symbol);
-    return {symbol,item,score:calculateStockScore(item),ind:indicators(item),signal:signalFromIndicators(item)};
-  }).sort((a,b)=>(b.score??-1)-(a.score??-1));
-
-  $("signalsContent").innerHTML=sorted.map(({symbol,item,score,ind,signal})=>{
-    let cls="signal-neutral";
-    if(score>=65)cls="signal-good";
-    else if(score<=35)cls="signal-bad";
-
-    return `
-    <div class="signal-row">
-      <span>${symbol} · ${WATCH[symbol]}</span>
-      <strong class="${cls}">${score===null?"Data saknas":score+"/100"}</strong>
-    </div>
-    <div class="note">
-      ${escapeHTML(signal)} · RSI ${ind.rsi===null?"–":fmt(ind.rsi)}
-      · 20d ${ind.momentum20===null?"–":pct(ind.momentum20)}
-      · Volym ${ind.volumeRatio===null?"–":ind.volumeRatio.toFixed(2)+"x"}
-    </div>`;
-  }).join("");
-}
-
-/* Connection status */
-function setConnection(live,message){
-  $("connection").innerHTML=`<span class="dot ${live?"live":""}"></span> ${escapeHTML(message)}`;
-}
-
-/* Hämta data */
-async function loadData(){
-  $("errorBox").innerHTML="";
-  setConnection(false,"HÄMTAR LIVE-DATA…");
-
-  try{
-    const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),20000);
-
-    const response=await fetch(API_URL,{
-      method:"GET",
-      cache:"no-store",
-      signal:controller.signal,
-      headers:{"Accept":"application/json"}
-    });
-
-    clearTimeout(timeout);
-
-    if(!response.ok)throw new Error(`API svarade med HTTP ${response.status}`);
-
-    const payload=await response.json();
-    if(payload.error)throw new Error(payload.error);
-
-    const received=normalizeData(payload);
-    if(!received.length)throw new Error("API-svaret innehåller ingen aktiedata.");
-
-    marketData=received;
-    lastSuccessfulFetch=new Date();
-    sectorMomentum=calculateSectorScore();
-
-    renderOverview();
-    renderMarket();
-    renderStocks();
-    renderSignals();
-
-    setConnection(true,"LIVE DATA · FINNHUB + HISTORIK");
-    $("lastUpdate").textContent="Senast uppdaterad: "+lastSuccessfulFetch.toLocaleString("sv-SE");
-
-  }catch(error){
-    console.error("Radar API-fel:",error);
-    setConnection(false,"LIVE-DATA FEL");
-    $("errorBox").innerHTML=`
-      <div class="error">
-        <b>Live-data kunde inte hämtas.</b><br>
-        ${escapeHTML(error.message||"Okänt fel")}<br>
-        Kontrollera Cloudflare Worker och API-kopplingen.
+  document.getElementById("quickView").innerHTML=SYMBOLS
+    .filter(symbol=>data[symbol])
+    .map(symbol=>{
+      const x=data[symbol];
+      return `
+      <div class="signal">
+        <div class="signalicon">${x.score===null?"⚪":x.score>=60?"🟢":x.score<45?"🔴":"🟡"}</div>
+        <div class="signalcontent">
+          <div class="signaltitle">${symbol}</div>
+          <div class="signaldesc">${x.trend}</div>
+        </div>
+        <div class="signalval ${x.score===null?"muted":x.score>=60?"green":x.score<45?"red":"yellow"}">
+          ${x.score===null?"--":x.score+"/100"}
+        </div>
       </div>`;
-  }
+    }).join("") || `<div class="small">Ingen data tillgänglig.</div>`;
 }
 
+/* Aktier och marknad */
+function renderStocks(){
+  document.getElementById("stockCards").innerHTML=
+    STOCKS.map(s=>data[s]?stockCard(data[s]):`
+      <article class="stock"><div class="ticker">${s}</div><div class="company">${NAMES[s]}</div>
+      <div class="badge warn">Data saknas</div></article>
+    `).join("");
+}
+
+function renderMarket(){
+  document.getElementById("marketCards").innerHTML=
+    ["SOXX","SMH"].map(s=>data[s]?stockCard(data[s]):`
+      <article class="stock"><div class="ticker">${s}</div><div class="company">${NAMES[s]}</div>
+      <div class="badge warn">Data saknas</div></article>
+    `).join("");
+}
+
+/* Signalpanel */
+function renderSignals(){
+  const signals=[];
+  const sector=["SOXX","SMH"].map(s=>data[s]).filter(x=>x && x.score!==null);
+  const stocks=STOCKS.map(s=>data[s]).filter(x=>x && x.score!==null);
+
+  if(sector.length){
+    const avg=sector.reduce((sum,x)=>sum+x.score,0)/sector.length;
+    if(avg>=70){
+      signals.push(["🚀","Sektorn visar styrka","SOXX/SMH har en stark teknisk sammanvägd poäng.","POSITIV","good"]);
+    }else if(avg<40){
+      signals.push(["⚠️","Sektorn är svag","Halvledarsektorn visar fortsatt teknisk press.","SVAG","bad"]);
+    }else{
+      signals.push(["🔄","Sektorn är neutral","Sektorn saknar ännu en tydlig riktning.","BEVAKA","warn"]);
+    }
+  }
+
+  stocks.forEach(x=>{
+    if(x.score>=75)
+      signals.push(["🟢",x.symbol+" – stark setup",`Momentum Score ${x.score}/100. ${x.trend}.`,"STARK","good"]);
+    else if(x.score<35)
+      signals.push(["🔴",x.symbol+" – svag trend",`Momentum Score ${x.score}/100. Tekniskt svag.`,"SVAG","bad"]);
+
+    if(x.rsi!==null && x.rsi<30)
+      signals.push(["📉",x.symbol+" – översåld",`RSI ${x.rsi.toFixed(2)}. Översåld nivå, inte automatisk köpsignal.`,"RSI","warn"]);
+
+    if(x.momentum20!==null && x.momentum20>0 && x.rsi!==null && x.rsi>=50 && x.score>=60)
+      signals.push(["💪",x.symbol+" – momentum positivt","20-dagars momentum är positivt och RSI visar styrka.","MOMENTUM","good"]);
+
+    if(x.reversal==="Förbättras" || x.reversal==="Stark")
+      signals.push(["🔄",x.symbol+" – vändningsläge",`Bedömning: ${x.reversal}. Score ${x.score}/100.`,"BEVAKA","good"]);
+  });
+
+  if(!signals.length){
+    signals.push(["⌛","Inga tydliga signaler ännu","Inväntar tillräcklig och användbar data.","AVVAKTA","warn"]);
+  }
+
+  document.getElementById("signalList").innerHTML=signals.map(s=>`
+    <div class="signal">
+      <div class="signalicon">${s[0]}</div>
+      <div class="signalcontent">
+        <div class="signaltitle">${s[1]}</div>
+        <div class="signaldesc">${s[2]}</div>
+      </div>
+      <div class="signalval ${s[4]}">${s[3]}</div>
+    </div>
+  `).join("");
+}
+
+function renderAll(){
+  renderOverview();
+  renderStocks();
+  renderMarket();
+  renderSignals();
+}
+
+/* Start */
 loadData();
 setInterval(loadData,15*60*1000);
 </script>
