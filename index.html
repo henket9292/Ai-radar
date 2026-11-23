@@ -503,15 +503,11 @@ async function loadData(){
   try{
 
     /* Tvinga ny begäran, undvik cache */
+    
     const response=await fetch(API_URL+"?t="+Date.now(),{
-      method:"GET",
-      cache:"no-store",
-      headers:{
-        "Cache-Control":"no-cache",
-        "Pragma":"no-cache"
-      }
-    });
-
+   method:"GET",
+   cache:"no-store"
+});
     if(!response.ok){
       throw new Error("HTTP "+response.status);
     }
